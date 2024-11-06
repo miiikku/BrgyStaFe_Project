@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaints</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/styles/styles.css">
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2E7D32; /* Dark green color */
+        }
+
+        .card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card a:hover {
+            background-color: #f0f0f0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <center>
+            <img src="https://www.dropbox.com/scl/fi/hplpyx3p3gjc3ozhxa7w6/Dasmarinas-removebg-preview.png?rlkey=bw11d1gi5odcv59ingug5pjeh&st=tl9dj1dk&dl=1" class="Logo">
+            <h1>BARANGAY SANTA FE<br>CITY OF DASMARIÑAS</h1>
+        </center>
+        <div class="sidenav">
+            <ul>
+                <li><a href="dashboard.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/es7o8fr6dw2vkkywjpg66/dashboard.png?rlkey=pp0dy252j9wao81jpz1n50f4p&st=83lbnbnz&dl=1" class="sidebar-icon">Dashboard</a></li>
+                <li><a href="notification.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/te9qkrjtunarm8znvfs1w/notification.png?rlkey=kqzy50yimgtro1l8caiqnqbua&st=4zuvr1p0&dl=1" class="sidebar-icon">Notification</a></li>
+                <li><a href="user-account.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/tnounxbo8vd5763gnoysp/userAccount.png?rlkey=hyos7zrh4ghwr66mjivsqfd5b&st=4ko3y2wy&dl=1" class="sidebar-icon">User Account</a></li>
+                <li><a href="residents.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/e57yqafcdt0z58wbgvv9e/residents.png?rlkey=wcqigcrhwveax3qubldx0qaql&st=np6th3hf&dl=1" class="sidebar-icon">Residents</a></li>
+                <li><a href="complaints.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/kbs0xnrc9usw40lv30clw/scales-of-justice.png?rlkey=d36ewu4dge121egpw53qri8mf&st=r04p7f12&dl=1" class="sidebar-icon">Complaints</a></li>
+                <li><a href="barangay-id.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/5bv5aqyto4z9york6lzwq/id-card.png?rlkey=crbfg36zcmb1tq9yfdg0t8zm2&st=ocm8u8fd&dl=1" class="sidebar-icon">Barangay ID</a></li>
+                <li><a href="request.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/idqomcr0ujnsmd54ktpu5/quote-request.png?rlkey=swquji94hs61jlr8y0p992s0n&st=vkr8y4i7&dl=1" class="sidebar-icon">Requests</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Complaints</h2>
+            <div class="user-info">
+                <div class="dropdown">
+                    <img src="https://www.dropbox.com/scl/fi/oedqyjb59kspzdylesk6y/user.png?rlkey=1axl685fxswp7olj90dbgu53y&st=7jh50r8n&dl=1" alt="User Avatar" class="dropbtn" onclick="toggleDropdown()">
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="admin-details.html" onclick="viewProfile()">User Profile</a>
+                        <a href="module.html">Maintenance</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards Section -->
+        <div class="card-container">
+            <div class="card"><a href="blotter.html">Blotter</a></div>
+            <div class="card"><a href="lupon.html">Lupon</a></div>
+            <div class="card"><a href="cfa.html">Certification to File Action</a></div>
+        </div>
+    </div>
+    <script>
+    // Toggle Dropdown
+    function toggleDropdown() {
+        var dropdown = document.getElementById("myDropdown");
+            if (dropdown) {
+                dropdown.classList.toggle("show");
+            } else {
+                console.error("Dropdown element not found");
+            }
+    }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                        if (openDropdown.classList.contains('show')) {
+                            openDropdown.classList.remove('show');
+                        }
+                }
+        }
+    }        
+    </script>
+</body>
+</html>

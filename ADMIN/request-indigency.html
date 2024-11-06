@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requests</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/styles/styles.css">
+</head>
+<body>
+    <div class="sidebar">
+        <center>
+            <img src="https://www.dropbox.com/scl/fi/hplpyx3p3gjc3ozhxa7w6/Dasmarinas-removebg-preview.png?rlkey=bw11d1gi5odcv59ingug5pjeh&st=tl9dj1dk&dl=1" class="Logo">
+            <h1>BARANGAY SANTA FE<br>CITY OF DASMARIÑAS</h1>
+        </center>
+        <div class="sidenav">
+            <ul>
+                <li><a href="dashboard.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/es7o8fr6dw2vkkywjpg66/dashboard.png?rlkey=pp0dy252j9wao81jpz1n50f4p&st=83lbnbnz&dl=1" class="sidebar-icon">Dashboard</a></li>
+                <li><a href="notification.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/te9qkrjtunarm8znvfs1w/notification.png?rlkey=kqzy50yimgtro1l8caiqnqbua&st=4zuvr1p0&dl=1" class="sidebar-icon">Notification</a></li>
+                <li><a href="user-account.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/tnounxbo8vd5763gnoysp/userAccount.png?rlkey=hyos7zrh4ghwr66mjivsqfd5b&st=4ko3y2wy&dl=1" class="sidebar-icon">User Account</a></li>
+                <li><a href="residents.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/e57yqafcdt0z58wbgvv9e/residents.png?rlkey=wcqigcrhwveax3qubldx0qaql&st=np6th3hf&dl=1" class="sidebar-icon">Residents</a></li>
+                <li><a href="complaints.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/kbs0xnrc9usw40lv30clw/scales-of-justice.png?rlkey=d36ewu4dge121egpw53qri8mf&st=r04p7f12&dl=1" class="sidebar-icon">Complaints</a></li>
+                <li><a href="barangay-id.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/5bv5aqyto4z9york6lzwq/id-card.png?rlkey=crbfg36zcmb1tq9yfdg0t8zm2&st=ocm8u8fd&dl=1" class="sidebar-icon">Barangay ID</a></li>
+                <li><a href="request.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/idqomcr0ujnsmd54ktpu5/quote-request.png?rlkey=swquji94hs61jlr8y0p992s0n&st=vkr8y4i7&dl=1" class="sidebar-icon">Requests</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Requests</h2>
+            <div class="user-info">
+                <div class="dropdown">
+                    <img src="https://www.dropbox.com/scl/fi/oedqyjb59kspzdylesk6y/user.png?rlkey=1axl685fxswp7olj90dbgu53y&st=7jh50r8n&dl=1" alt="User Avatar" class="dropbtn" onclick="toggleDropdown()">
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="admin-details.html" onclick="viewProfile()">User Profile</a>
+                        <a href="module.html">Maintenance</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="search-and-actions">
+            <div class="search-box">
+                <input type="text" placeholder="Search..." oninput="searchRequestIndigency()">
+            </div>
+            <div class="filter-box">
+                <select onchange="navigateToPage(this)">
+                    <option value="request-indigency.html" selected>Processing</option>
+                    <option value="request-indigency-complete.html">Completed</option>
+                </select>
+            </div>
+       
+            <div class="account-actions">
+                <button class="add-btn" onclick="openModal()">Add</button>
+                <div id="addModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <h2>ADD REQUEST</h2>
+                        <!-- Updated Add Form -->
+                        <form id="addForm">
+                            <div class="form-row">
+                                <div class="floating-label">
+                                    <input type="text" id="firstName" placeholder="">
+                                    <label for="firstName">First Name</label>
+                                </div>
+                                <div class="floating-label">
+                                    <input type="text" id="middleName" placeholder="">
+                                    <label for="middleName">Middle Name</label>
+                                </div>
+                                <div class="floating-label">
+                                    <input type="text" id="lastName" placeholder="">
+                                    <label for="lastName">Last Name</label>
+                                </div>
+                                <div class="floating-label">
+                                    <input type="number" id="age" placeholder="">
+                                    <label for="age">Age</label>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="floating-label">
+                                    <input type="text" id="blk" placeholder="">
+                                    <label for="blk">Blk</label>
+                                </div>
+                                <div class="floating-label">
+                                    <input type="text" id="lot" placeholder="">
+                                    <label for="lot">Lot</label>
+                                </div>
+                                <div class="floating-label">
+                                    <input type="text" id="street" placeholder="">
+                                    <label for="street">Street</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="floating-label">
+                                    <input type="text" id="barangay" placeholder=" " value="Santa Fe" readonly required>
+                                    <label for="barangay">Barangay</label>
+                                </div>
+                                <div class="floating-label">
+                                    <input type="text" id="city" placeholder=" " value="Dasmariñas" readonly required>
+                                    <label for="city">City</label>
+                                </div>
+                                <div class="floating-label">
+                                    <input type="text" id="province" placeholder=" " value="Cavite" readonly required>
+                                    <label for="province">Province</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="floating-label">
+                                    <input type="number" id="yearsresiding" placeholder="">
+                                    <label for="yearsresiding">Years Residing</label>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="floating-label">
+                                    <input type="text" id="purpose" placeholder=" " required>
+                                    <label for="purpose">Purpose</label>
+                                </div>
+                                <div class="floating-label">
+                                    <input type="date" id="dateIssued" placeholder=" " required>
+                                    <label for="dateIssued">Date Issued</label>
+                                </div>
+                                <div class="floating-label">
+                                    <select id="status">
+                                        <option value="Processing" disabled selected>Processing</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="button-container">
+                                <button type="submit" class="add-btn">Add</button>
+                                <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="account-content">
+            <h3>Barangay Indigency</h3>
+            <div class="account-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Address</th>
+                            <th>Years Residing</th>
+                            <th>Purpose</th>
+                            <th>Date Issued</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="request-table-body">
+                        <!-- Rows will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditModal()">&times;</span>
+                <h2>EDIT REQUEST</h2>
+                <!-- Updated Edit Form -->
+                <form id="editForm">
+                    <input type="hidden" id="editId">
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <input type="text" id="editFirstName" placeholder="" required>
+                            <label for="editFirstName">First Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editMiddleName" placeholder="" required>
+                            <label for="editMiddleName">Middle Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editLastName" placeholder="" required>
+                            <label for="editLastName">Last Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="number" id="editAge" placeholder="" required>
+                            <label for="editAge">Age</label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <input type="text" id="editBlk" placeholder="" required>
+                            <label for="editBlk">Blk</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editLot" placeholder="" required>
+                            <label for="editLot">Lot</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editStreet" placeholder="" required>
+                            <label for="editStreet">Street</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <input type="text" id="editBarangay" placeholder=" " value="Santa Fe" readonly required>
+                            <label for="editBarangay">Barangay</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editCity" placeholder=" " value="Dasmariñas" readonly required>
+                            <label for="editCity">City</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editProvince" placeholder=" " value="Cavite" readonly required>
+                            <label for="editProvince">Province</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <input type="text" id="editYearsResiding" placeholder="">
+                            <label for="editYearsResiding">Years Residing</label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <input type="text" id="editPurpose" placeholder="" required>
+                            <label for="editPurpose">Purpose</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="date" id="editDateIssued" placeholder="" required>
+                            <label for="editDateIssued">Date Issued</label>
+                        </div>
+                        <div class="floating-label">
+                            <select id="editStatus" placeholder="Status" required>
+                                <option value="Processing">Processing</option>
+                                <option value="Complete">Complete</option>
+                            </select>
+                            <label for="editStatus">Status</label>
+                        </div>
+                    </div>
+                    
+                    <div class="button-container">
+                        <button type="submit" class="edit-btn">Save</button>
+                        <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<script src="public/styles/script.js"></script>
+    <script>
+        // SEARCH FUNCTIONALITY
+        function searchRequestIndigency() {
+            const searchValue = document.querySelector('.search-box input').value.toLowerCase();
+            const rows = document.querySelectorAll('#request-table-body tr');
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                let matches = false;
+                
+                cells.forEach(cell => {
+                    if (cell.textContent.toLowerCase().includes(searchValue)) {
+                        matches = true;
+                    }
+                });
+
+                if (matches) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // TO DISPLAY TABLE FROM MONGODB
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchIndigencyRequests();
+        });
+
+        function fetchIndigencyRequests() {
+            fetch('/fetch-indigency-requests')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('request-table-body');
+                    tableBody.innerHTML = ''; // Clear any existing rows
+
+                    data.forEach(request => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${request.firstName} ${request.middleName} ${request.lastName}</td>
+                            <td>${request.age}</td>
+                            <td>${request.address}</td>
+                            <td>${request.yearsResiding}</td>
+                            <td>${request.purpose}</td>
+                            <td>${request.dateIssued}</td>
+                            <td>${request.status}</td>
+                            <td>
+                                <a href="#"><img src="https://www.dropbox.com/scl/fi/u6i83geituweeaybi8y9w/pen.png?rlkey=5f7vjmsrn42d1t0iaxdu3jbjy&st=0sk8r60h&dl=1" alt="Edit" class="edit-icon" onclick="openEditModal('${request._id}')"></a>
+                                <a href="#"><img src="https://www.dropbox.com/scl/fi/ho6y40rqr930v22ja9219/delete.png?rlkey=b1xjg0s1v3rnrgjx1n5v2usgm&st=xgbxk20f&dl=1" alt="Delete" class="delete-icon" onclick="deleteRequest('${request._id}')"></a>
+                                <a href="#"><img src="https://www.dropbox.com/scl/fi/n1hy2jgp7k25kj1pvg9yz/greenDocument.png?rlkey=exgue55jtsy1frhnpsnc7koi7&st=r1kou07n&dl=1" alt="Generate" class="generate-icon" onclick="generateRequestIndigency('${request._id}')"></a>
+                                ${request.status === 'Complete' ? '<a href="#"><img src="https://www.dropbox.com/scl/fi/brbnzjxfdeqjerssseaxc/checked.png?rlkey=yinbka4wjvra6n5dxazi4l13a&st=wpwljnp2&dl=1" alt="transfer-icon" class="transfer-icon" onclick="transferRequest(\'' + request._id + '\')"></a>' : ''}
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching indigency requests:', error);
+            });
+        }
+
+        document.getElementById('addForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    // Combine the individual address components into one string
+    const fullAddress = `Blk ${document.getElementById('blk').value}, Lot ${document.getElementById('lot').value}, ${document.getElementById('street').value}, ${document.getElementById('barangay').value}, ${document.getElementById('city').value}, ${document.getElementById('province').value}`;
+
+    const newRequest = {
+        firstName: document.getElementById('firstName').value,
+        middleName: document.getElementById('middleName').value,
+        lastName: document.getElementById('lastName').value,
+        age: document.getElementById('age').value,
+        address: fullAddress,  // Save the full address
+        yearsResiding: document.getElementById('yearsresiding').value,
+        purpose: document.getElementById('purpose').value,
+        dateIssued: document.getElementById('dateIssued').value,
+        status: document.getElementById('status').value,
+    };
+
+    // Send the data to the backend
+    fetch('/add-request-indigency', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newRequest),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.querySelector('form').reset(); // Clear the form
+            fetchIndigencyRequests(); // Refresh the table after adding
+            closeModal(); // Close the modal
+        } else {
+            console.error('Error adding request:', data);
+        }
+    })
+    .catch(error => console.error('Error adding request:', error));
+});
+
+
+        //For Edit Req
+        function openEditModal(id) {
+    fetch(`/fetch-indigency-request/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            // Populate the form with the current data
+            document.getElementById('editId').value = data._id;
+            document.getElementById('editFirstName').value = data.firstName || '';
+            document.getElementById('editMiddleName').value = data.middleName || '';
+            document.getElementById('editLastName').value = data.lastName || '';
+            document.getElementById('editAge').value = data.age || '';
+
+            // Populate the address fields
+            const addressParts = data.address ? data.address.split(', ') : [];
+            document.getElementById('editBlk').value = addressParts[0]?.replace('Blk ', '') || ''; 
+            document.getElementById('editLot').value = addressParts[1]?.replace('Lot ', '') || ''; 
+            document.getElementById('editStreet').value = addressParts[2] || ''; 
+            document.getElementById('editBarangay').value = addressParts[3] || ''; 
+            document.getElementById('editCity').value = addressParts[4] || ''; 
+            document.getElementById('editProvince').value = addressParts[5] || ''; 
+
+            document.getElementById('editYearsResiding').value = data.yearsResiding || '';
+            document.getElementById('editPurpose').value = data.purpose || '';
+            document.getElementById('editDateIssued').value = data.dateIssued || '';
+            document.getElementById('editStatus').value = data.status || 'Processing';
+
+            // Open the modal
+            document.getElementById('editModal').style.display = 'block';
+        })
+        .catch(error => console.error('Error fetching request:', error));
+}
+
+document.getElementById('editForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const fullAddress = `Blk ${document.getElementById('editBlk').value}, Lot ${document.getElementById('editLot').value}, ${document.getElementById('editStreet').value}, ${document.getElementById('editBarangay').value}, ${document.getElementById('editCity').value}, ${document.getElementById('editProvince').value}`;
+
+    const updatedRequest = {
+        firstName: document.getElementById('editFirstName').value || '',
+        middleName: document.getElementById('editMiddleName').value || '',
+        lastName: document.getElementById('editLastName').value || '',
+        age: document.getElementById('editAge').value || '',
+        address: fullAddress,
+        yearsResiding: document.getElementById('editYearsResiding').value || '',
+        purpose: document.getElementById('editPurpose').value || '',
+        dateIssued: document.getElementById('editDateIssued').value || '',
+        status: document.getElementById('editStatus').value || 'Processing',
+    };
+
+    const id = document.getElementById('editId').value;
+
+    fetch(`/update-request-indigency/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedRequest),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            fetchIndigencyRequests(); // Refresh the table after updating
+            closeEditModal(); // Close the edit modal
+        } else {
+            console.error('Error updating request:', data);
+        }
+    })
+    .catch(error => console.error('Error updating request:', error));
+});
+
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+
+        function deleteRequest(id) {
+            if (confirm("Are you sure you want to delete this request?")) {
+                fetch(`/delete-request-indigency/${id}`, {
+                    method: 'DELETE',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        fetchIndigencyRequests(); // Refresh the table after deleting
+                    } else {
+                        console.error('Error deleting request:', data);
+                    }
+                })
+                .catch(error => console.error('Error deleting request:', error));
+            }
+        }
+
+    
+        function addRequestToTable(request) {
+            const tableBody = document.getElementById('request-table-body');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${request.firstName} ${request.middleName} ${request.lastName}</td>
+                <td>${request.age}</td>
+                <td>${request.address}</td>
+                <td>${request.yearsResiding}</td>
+                <td>${request.purpose}</td>
+                <td>${request.dateIssued}</td>
+                <td>${request.status}</td>
+                <td>
+                    <a href="#"><img src="https://www.dropbox.com/scl/fi/u6i83geituweeaybi8y9w/pen.png?rlkey=5f7vjmsrn42d1t0iaxdu3jbjy&st=0sk8r60h&dl=1" alt="Edit" class="edit-icon" onclick="openEditModal('${request._id}')"></a>
+                    <a href="#"><img src="https://www.dropbox.com/scl/fi/ho6y40rqr930v22ja9219/delete.png?rlkey=b1xjg0s1v3rnrgjx1n5v2usgm&st=xgbxk20f&dl=1" alt="Delete" class="delete-icon" onclick="deleteRequest('${request._id}')"></a>
+                    <a href="#"><img src="https://www.dropbox.com/scl/fi/n1hy2jgp7k25kj1pvg9yz/greenDocument.png?rlkey=exgue55jtsy1frhnpsnc7koi7&st=r1kou07n&dl=1" alt="Generate" class="generate-icon" onclick="generateRequestIndigency('${request._id}')"></a>
+                    ${request.status === 'Complete' ? `<a href="#"><img src="https://www.dropbox.com/scl/fi/brbnzjxfdeqjerssseaxc/checked.png?rlkey=yinbka4wjvra6n5dxazi4l13a&st=wpwljnp2&dl=1" alt="Transfer" class="transfer-icon" onclick="transferRequest('${request._id}')"></a>` : ''}
+                </td>
+            `;
+            tableBody.appendChild(row);
+        }
+
+        function transferRequest(id) {
+            if (confirm("Are you sure you want to transfer this request?")) {
+                fetch(`/transfer-request-indigency/${id}`, {
+                    method: 'PUT',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        fetchIndigencyRequests(); // Refresh the table after transferring
+                    } else {
+                        console.error('Error transferring request:', data);
+                    }
+                })
+                .catch(error => console.error('Error transferring request:', error));
+            }
+        }
+
+        function generateRequestIndigency(id) {
+            // Fetch the indigency request data by ID
+            fetch(`/fetch-indigency-request/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Build the query string with the necessary data
+                    const params = new URLSearchParams({
+                        name: `${data.firstName} ${data.middleName} ${data.lastName}`,
+                        age: data.age,
+                        address: data.address,
+                        yearsResiding: data.yearsResiding,
+                        purpose: data.purpose,
+                        dateIssued: data.dateIssued || 'undefined' // Default to 'undefined' if not issued yet
+                });
+
+                // Redirect to generate-indigency.html with the data as query parameters
+                window.location.href = `generate-indigency.html?${params.toString()}`;
+            })
+            .catch(error => console.error('Error fetching request:', error));
+        }
+
+// FOR DATE
+function setMinDate() {
+    const today = new Date().toISOString().split('T')[0]; 
+    
+    document.getElementById('dateIssued').setAttribute('min', today);
+    document.getElementById('editDateIssued').setAttribute('min', today);
+}
+
+window.onload = function() {
+    setMinDate(); 
+    fetchIndigencyRequests(); 
+};
+
+    </script>
+        
+</body>
+</html>

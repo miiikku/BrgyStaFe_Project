@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Forgot Password</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/styles/loginpages.css"> <!-- Reusing CSS for consistent style -->
+</head>
+<body class="login-page-body"> <!-- Consistent body class -->
+    <div class="login-container"> <!-- Consistent container class -->
+        <!-- Step 1: Admin Username Form -->
+        <form id="admin-forgot-password-form" class="login-form">
+            <h2>Admin Forgot Password</h2>
+
+            <div class="input-group">
+                <input type="text" id="admin-username" name="username" placeholder="Enter Admin Username" required>
+            </div>
+
+            <button type="submit">Check Username</button>
+        </form>
+
+        <!-- Step 2: Reset Password Form, initially hidden -->
+        <form id="admin-reset-password-form" class="login-form" style="display:none;">
+            <h2>Reset Password</h2>
+
+            <div class="input-group">
+                <input type="password" id="admin-new-password" name="new-password" placeholder="New Password" required>
+                <input type="password" id="admin-confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+            </div>
+
+            <button type="submit">Reset Password</button>
+        </form>
+
+        <!-- Notification Popup -->
+        <div id="admin-notification" class="notification">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <span id="admin-notification-message"></span>
+        </div>
+    </div>
+
+    <script>
+        const adminForgotPasswordForm = document.getElementById('admin-forgot-password-form');
+        const adminResetPasswordForm = document.getElementById('admin-reset-password-form');
+        const adminNotification = document.getElementById('admin-notification');
+        const adminMessage = document.getElementById('admin-notification-message');
+
+        // Handle the Admin Forgot Password Form
+        adminForgotPasswordForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(adminForgotPasswordForm);
+            const data = { username: formData.get('username') };
+
+            const response = await fetch('/admin-forgot-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.text();
+            adminMessage.innerText = result;
+
+            if (response.ok) {
+                adminNotification.classList.add('success');
+                adminResetPasswordForm.style.display = 'block';
+                adminForgotPasswordForm.style.display = 'none';
+            } else {
+                adminNotification.classList.remove('success');
+            }
+
+            adminNotification.style.display = 'block';
+        });
+
+        // Handle the Admin Reset Password Form
+        adminResetPasswordForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(adminResetPasswordForm);
+            const newPassword = formData.get('new-password');
+            const confirmPassword = formData.get('confirm-password');
+
+            if (newPassword !== confirmPassword) {
+                adminMessage.innerText = 'Passwords do not match';
+                adminNotification.classList.remove('success');
+                adminNotification.style.display = 'block';
+                return;
+            }
+
+            const data = {
+                username: document.getElementById('admin-username').value,
+                newPassword: newPassword
+            };
+
+            const response = await fetch('/admin-reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.text();
+            adminMessage.innerText = result;
+
+            if (response.ok) {
+                adminNotification.classList.add('success');
+                setTimeout(() => window.location.href = '/login.html', 2000);  // Redirect to admin login after success
+            } else {
+                adminNotification.classList.remove('success');
+            }
+
+            adminNotification.style.display = 'block';
+        });
+    </script>
+</body>
+</html>

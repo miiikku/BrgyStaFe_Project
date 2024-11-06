@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barangay Santa Fe - Indigency Request</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/user/request-document-clear-indi.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://www.dropbox.com/scl/fi/fan2zv4s27rhmpd7gmtex/brgystafe.png?rlkey=exhrm1gcwkaik313g0r9al119&st=2j1m6lkb&dl=1" alt="Barangay Santa Fe Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="home.html">HOME</a></li>
+                <li><a href="offices.html">OFFICES</a></li>
+                <li><a href="request-document.html">REQUEST DOCUMENT</a></li>
+                <li><a href="home.html#about-section">ABOUT</a></li>
+                <li><a href="home.html#about-section">CONTACT</a></li>
+                <li><a href="#" id="user-icon"><img src="https://www.dropbox.com/scl/fi/tnounxbo8vd5763gnoysp/userAccountWhite.png?rlkey=hyos7zrh4ghwr66mjivsqfd5b&st=07eppc1l&dl=1" alt="user-icon" class="user-icon"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="form-container">
+            <h1>REQUEST DOCUMENT - INDIGENCY</h1>
+            <form id="requestForm">
+                <div class="input-row">
+                    <div class="floating-label-group">
+                        <input type="text" name="firstName" id="firstName" placeholder=" " required readonly>
+                        <label for="firstName">First Name</label>
+                    </div>
+                    <div class="floating-label-group">
+                        <input type="text" name="middleName" id="middleName" placeholder=" " required readonly>
+                        <label for="middleName">Middle Name</label>
+                    </div>
+                    <div class="floating-label-group">
+                        <input type="text" name="lastName" id="lastName" placeholder=" " required readonly>
+                        <label for="lastName">Last Name</label>
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="floating-label-group">
+                        <input type="number" name="age" placeholder=" " required>
+                        <label for="age">Age</label>
+                    </div>
+                    <div class="floating-label-group">
+                        <input type="number" name="yearsResiding" placeholder=" " required>
+                        <label for="yearsResiding">Years Residing</label>
+                    </div>
+                    <div class="floating-label-group">
+                        <input type="text" name="purpose" placeholder=" " required>
+                        <label for="purpose">Purpose</label>
+                    </div>
+                </div>
+                <!-- Updated Address Fields -->
+                <div class="input-row">
+                    <div class="floating-label-group">
+                        <input type="text" name="blk" id="blk" placeholder=" " required>
+                        <label for="blk">Blk</label>
+                    </div>
+                    <div class="floating-label-group">
+                        <input type="text" name="lot" id="lot" placeholder=" " required>
+                        <label for="lot">Lot</label>
+                    </div>
+                    <div class="floating-label-group">
+                        <input type="text" name="street" id="street" placeholder=" " required>
+                        <label for="street">Street</label>
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="floating-label-group">
+                        <input type="text" name="barangay" id="barangay" value="Santa Fe" readonly required>
+                        <label for="barangay">Barangay</label>
+                    </div>
+                    <div class="floating-label-group">
+                        <input type="text" name="city" id="city" value="Dasmariñas" readonly required>
+                        <label for="city">City</label>
+                    </div>
+                    <div class="floating-label-group">
+                        <input type="text" name="province" id="province" value="Cavite" readonly required>
+                        <label for="province">Province</label>
+                    </div>
+                </div>
+                <div class="input-row">
+                    <button type="submit">REQUEST</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    
+
+    <!-- User Profile Popup -->
+    <div id="user-popup" class="user-popup">
+        <div class="user-header">
+            <span>User Options</span>
+            <span class="close-btn" onclick="toggleUserPopup()">&times;</span>
+        </div>
+        <div class="user-content">
+            <a href="user-profile.html">User Profile</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <script src="public/styles/users.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    fetchUserDetails();
+
+    const requestForm = document.getElementById('requestForm');
+    requestForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(requestForm);
+        const fullAddress = `Blk ${formData.get('blk')}, Lot ${formData.get('lot')}, ${formData.get('street')}, ${formData.get('barangay')}, ${formData.get('city')}, ${formData.get('province')}`;
+
+        const requestData = {
+            firstName: formData.get('firstName'),
+            middleName: formData.get('middleName'),
+            lastName: formData.get('lastName'),
+            age: formData.get('age'),
+            purpose: formData.get('purpose'),
+            yearsResiding: formData.get('yearsResiding'),
+            address: fullAddress,  // Combine the individual parts into a full address string
+            dateIssued: " ",
+            status: "Processing"
+        };
+
+        // First, submit the document request
+        try {
+            const response = await fetch('/add-request-indigency', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                
+                // After successful request submission, initiate the payment process
+                const paymentResponse = await fetch('/request-indi-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        firstName: formData.get('firstName'),
+                        middleName: formData.get('middleName'),
+                        lastName: formData.get('lastName')
+                    })
+                });
+
+                const paymentData = await paymentResponse.json();
+                if (paymentData.success) {
+                    alert(`Request submitted successfully! We have sent an email to ${paymentData.email} with the payment link.`);
+                } else {
+                    alert('Failed to generate payment link');
+                }
+            } else {
+                alert('Failed to submit request');
+            }
+        } catch (error) {
+            console.error('Error submitting request:', error);
+            alert('An error occurred while submitting the request');
+        }
+    });
+});
+
+function fetchUserDetails() {
+    fetch('/user-details')
+        .then(response => response.json())
+        .then(user => {
+            document.getElementById('firstName').value = user.firstname;
+            document.getElementById('middleName').value = user.middlename;
+            document.getElementById('lastName').value = user.lastname;
+        })
+        .catch(error => {
+            console.error('Error fetching user details:', error);
+        });
+}
+
+function clearUserDetails() {
+    localStorage.removeItem('userDetails');
+}
+
+    </script>    
+</body>
+</html>

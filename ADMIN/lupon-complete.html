@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completed Lupon and Kasunduan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/styles/styles.css">
+</head>
+<body>
+    <div class="sidebar">
+        <center>
+            <img src="https://www.dropbox.com/scl/fi/hplpyx3p3gjc3ozhxa7w6/Dasmarinas-removebg-preview.png?rlkey=bw11d1gi5odcv59ingug5pjeh&st=tl9dj1dk&dl=1" class="Logo">
+            <h1>BARANGAY SANTA FE<br>CITY OF DASMARIÑAS</h1>
+        </center>
+        <div class="sidenav">
+            <ul>
+                <li><a href="dashboard.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/es7o8fr6dw2vkkywjpg66/dashboard.png?rlkey=pp0dy252j9wao81jpz1n50f4p&st=83lbnbnz&dl=1" class="sidebar-icon">Dashboard</a></li>
+                <li><a href="notification.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/te9qkrjtunarm8znvfs1w/notification.png?rlkey=kqzy50yimgtro1l8caiqnqbua&st=4zuvr1p0&dl=1" class="sidebar-icon">Notification</a></li>
+                <li><a href="user-account.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/tnounxbo8vd5763gnoysp/userAccount.png?rlkey=hyos7zrh4ghwr66mjivsqfd5b&st=4ko3y2wy&dl=1" class="sidebar-icon">User Account</a></li>
+                <li><a href="residents.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/e57yqafcdt0z58wbgvv9e/residents.png?rlkey=wcqigcrhwveax3qubldx0qaql&st=np6th3hf&dl=1" class="sidebar-icon">Residents</a></li>
+                <li><a href="complaints.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/kbs0xnrc9usw40lv30clw/scales-of-justice.png?rlkey=d36ewu4dge121egpw53qri8mf&st=r04p7f12&dl=1" class="sidebar-icon">Complaints</a></li>
+                <li><a href="barangay-id.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/5bv5aqyto4z9york6lzwq/id-card.png?rlkey=crbfg36zcmb1tq9yfdg0t8zm2&st=ocm8u8fd&dl=1" class="sidebar-icon">Barangay ID</a></li>
+                <li><a href="request.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/idqomcr0ujnsmd54ktpu5/quote-request.png?rlkey=swquji94hs61jlr8y0p992s0n&st=vkr8y4i7&dl=1" class="sidebar-icon">Requests</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h2>Completed Lupon and Kasunduan</h2>
+            <div class="user-info">
+                <div class="dropdown">
+                    <img src="https://www.dropbox.com/scl/fi/oedqyjb59kspzdylesk6y/user.png?rlkey=1axl685fxswp7olj90dbgu53y&st=7jh50r8n&dl=1" alt="User Avatar" class="dropbtn" onclick="toggleDropdown()">
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="admin-details.html" onclick="viewProfile()">User Profile</a>
+                        <a href="module.html">Maintenance</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="search-and-actions">
+            <div class="search-box">
+                <input type="text" placeholder="Search..." oninput="searchLuponAndKasunduanComplete()">
+            </div>
+            <div class="filter-box">
+                <select onchange="navigateToPage(this)">
+                    <option value="lupon.html">Processing</option>
+                    <option value="lupon-complete.html" selected>Completed</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Completed Lupon Table -->
+<div class="account-content">
+    <h3>Completed Lupon</h3>
+    <div class="table-scroll"> <!-- Scrollable area -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Petsa</th>
+                    <th>Usapin Blg.</th>
+                    <th>Nagsumbong</th>
+                    <th>Laban kay</th>
+                    <th>Sumbong</th>
+                    <th>Lunas</th>
+                    <th>Hearing Stage</th>
+                    <th>Hearing Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="completed-lupon-table-body">
+                <!-- Lupon Rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Completed Kasunduan Table -->
+<div class="account-content">
+    <h3>Completed Kasunduan</h3>
+    <div class="table-scroll"> <!-- Scrollable area -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Complainant's Name</th>
+                    <th>Complainee's Name</th>
+                    <th>Kasunduan</th>
+                    <th>Lupong Tagapamahala</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="completed-kasunduan-table-body">
+                <!-- Kasunduan Rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+        <script src="public/styles/script.js"></script>
+        <script>
+            //SEARCH
+            function searchLuponAndKasunduanComplete() {
+    // Get the search input value
+    const searchValue = document.querySelector('.search-box input').value.toLowerCase();
+
+    // Search Completed Lupon Table
+    const completedLuponRows = document.querySelectorAll('#completed-lupon-table-body tr');
+    completedLuponRows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const matches = Array.from(cells).some(cell => 
+            cell.textContent.toLowerCase().includes(searchValue)
+        );
+        if (matches) {
+            row.style.display = ''; // Show the row
+        } else {
+            row.style.display = 'none'; // Hide the row
+        }
+    });
+
+    // Search Completed Kasunduan Table
+    const completedKasunduanRows = document.querySelectorAll('#completed-kasunduan-table-body tr');
+    completedKasunduanRows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const matches = Array.from(cells).some(cell => 
+            cell.textContent.toLowerCase().includes(searchValue)
+        );
+        if (matches) {
+            row.style.display = ''; // Show the row
+        } else {
+            row.style.display = 'none'; // Hide the row
+        }
+    });
+}
+
+       // DISPLAYING COMPLETED LUPON
+       async function fetchCompletedLupon() {
+  try {
+    const response = await fetch('/fetch-completed-lupon');
+    const data = await response.json();
+
+    const luponTableBody = document.getElementById('completed-lupon-table-body');
+    luponTableBody.innerHTML = ''; // Clear existing rows
+
+    data.forEach(entry => {
+      const complainantFullName = `${entry.complainantFirstName || ''} ${entry.complainantMiddleName || ''} ${entry.complainantLastName || ''}`.trim();
+      const complaineeFullName = `${entry.complaineeFirstName || ''} ${entry.complaineeMiddleName || ''} ${entry.complaineeLastName || ''}`.trim();
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${entry.petsa || ''}</td>
+        <td>${entry.usapinBlg || ''}</td>
+        <td>${complainantFullName}</td>
+        <td>${complaineeFullName}</td>
+        <td>${entry.sumbong || ''}</td>
+        <td>${entry.lunas || ''}</td>
+        <td>${entry.hearingStage || ''}</td>
+        <td>${entry.hearingDate || ''}</td>
+        <td>${entry.status || ''}</td>
+      `;
+      luponTableBody.appendChild(row);
+    });
+  } catch (err) {
+    console.error('Error fetching completed lupon:', err);
+  }
+}
+
+
+// DISPLAYING COMPLETED KASUNDUAN
+async function fetchCompletedKasunduan() {
+  try {
+    const response = await fetch('/fetch-completed-lupon-kasunduan');
+    const data = await response.json();
+
+    const kasunduanTableBody = document.getElementById('completed-kasunduan-table-body');
+    kasunduanTableBody.innerHTML = ''; // Clear existing rows
+
+    data.forEach(entry => {
+      const complainantFullName = `${entry.complainantFirstName || ''} ${entry.complainantMiddleName || ''} ${entry.complainantLastName || ''}`.trim();
+      const complaineeFullName = `${entry.complaineeFirstName || ''} ${entry.complaineeMiddleName || ''} ${entry.complaineeLastName || ''}`.trim();
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${entry.date || ''}</td>
+        <td>${entry.time || ''}</td>
+        <td>${complainantFullName}</td>
+        <td>${complaineeFullName}</td>
+        <td>${entry.kasunduan || ''}</td>
+        <td>${entry.LupongTagapamahala || ''}</td>
+        <td>${entry.status || ''}</td>
+      `;
+      kasunduanTableBody.appendChild(row);
+    });
+  } catch (err) {
+    console.error('Error fetching completed kasunduan:', err);
+  }
+}
+
+
+// Call these functions to populate tables when the page loads
+fetchCompletedLupon();
+fetchCompletedKasunduan();
+
+        </script>
+</body>
+</html>

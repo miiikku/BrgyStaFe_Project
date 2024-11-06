@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barangay Santa Fe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/styles/welcome.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://www.dropbox.com/scl/fi/fan2zv4s27rhmpd7gmtex/brgystafe.png?rlkey=exhrm1gcwkaik313g0r9al119&st=2j1m6lkb&dl=1" alt="Barangay Santa Fe Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="welcome.html">HOME</a></li>
+                <li><a href="office.html">OFFICES</a></li>
+                <li><a href="login-resident.html">REQUEST DOCUMENT</a></li>
+                <li><a href="#about-section">ABOUT</a></li>
+                <li><a href="#about-section">CONTACT</a></li>
+                <li><a href="login.html">LOGIN</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="welcome">
+            <img src="https://www.dropbox.com/scl/fi/jqngvhwapmqbw0rkn9r2y/userheader.png?rlkey=einfho4f52ec1q93q00cqhehz&st=swvlrab6&dl=1" alt="Welcome Header" class="header-image">
+        </section>
+        <section class="vision-mission">
+            <div class="vision">
+                <h2>Vision</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <div class="mission">
+                <h2>Mission</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+        </section>
+        <section class="officials">
+            <h2>Barangay Officials</h2>
+            <div class="official-container">
+                <div class="official" id="secretary">
+                    <img src="https://www.dropbox.com/scl/fi/gv4u99hy6y9s9fu5vffeq/PICofficial.jpg?rlkey=moooqg0ub40srgb1miej5a19t&st=ih0a13an&dl=1" alt="Barangay Secretary">
+                    <h3 id="secretary-name"></h3>
+                    <p>BARANGAY SECRETARY</p>
+                </div>
+                <div class="official" id="chairman">
+                    <img src="https://www.dropbox.com/scl/fi/gv4u99hy6y9s9fu5vffeq/PICofficial.jpg?rlkey=moooqg0ub40srgb1miej5a19t&st=ih0a13an&dl=1" alt="Barangay Chairman">
+                    <h3 id="chairman-name"></h3>
+                    <p>BARANGAY CHAIRMAN</p>
+                </div>
+                <div class="official" id="treasurer">
+                    <img src="https://www.dropbox.com/scl/fi/gv4u99hy6y9s9fu5vffeq/PICofficial.jpg?rlkey=moooqg0ub40srgb1miej5a19t&st=ih0a13an&dl=1" alt="Barangay Treasurer">
+                    <h3 id="treasurer-name"></h3>
+                    <p>BARANGAY TREASURER</p>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    <footer id="about-section">
+        <div class="footer-top">
+            <ul>
+                <li><a href="home.html">HOME</a></li>
+                <li><a href="office.html">OFFICES</a></li>
+                <li><a href="request-document.html">REQUEST DOCUMENT</a></li>
+            </ul>
+        </div>
+        <hr class="footer-divider">
+        <div class="footer-middle">
+            <p>Santa Fe Barangay Hall is a town hall in Dasmariñas, Cavite, Calabarzon. Santa Fe Barangay Hall is situated close to the sports venue Santa Fe Multi-Purpose Court and the pitch Santa Fe Half Court.</p>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Barangay Santa Fe. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        async function fetchOfficials() {
+            try {
+                const response = await fetch('/get-officials');
+                const officials = await response.json();
+                console.log(officials); // Check the response in the browser console
+        
+                // Find each official based on position and update the corresponding section
+                officials.forEach(official => {
+                    const position = official.position.toLowerCase(); // Normalize position for matching
+                    if (position === 'secretary') {
+                        document.querySelector('#secretary-name').textContent = `${official.firstName} ${official.middleName} ${official.lastName}`;
+                    } else if (position === 'punong barangay') {
+                        document.querySelector('#chairman-name').textContent = `${official.firstName} ${official.middleName} ${official.lastName}`;
+                    } else if (position === 'treasurer') {
+                        document.querySelector('#treasurer-name').textContent = `${official.firstName} ${official.middleName} ${official.lastName}`;
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching officials:', error);
+            }
+        }
+                
+        // Call the fetchOfficials function after the page loads
+        window.onload = fetchOfficials;
+    </script>        
+</body>
+</html>

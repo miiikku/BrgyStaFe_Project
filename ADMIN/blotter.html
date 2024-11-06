@@ -1,0 +1,1030 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blotter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/styles/styles.css">
+    <style>
+        /* Adjust the size and scrollable area for textarea */
+        .floating-label textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-size: 10px;
+            resize: vertical;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        .modal-content {
+            max-width: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <center>
+            <img src="https://www.dropbox.com/scl/fi/hplpyx3p3gjc3ozhxa7w6/Dasmarinas-removebg-preview.png?rlkey=bw11d1gi5odcv59ingug5pjeh&st=tl9dj1dk&dl=1" class="Logo">
+            <h1>BARANGAY SANTA FE<br>CITY OF DASMARIÑAS</h1>
+        </center>
+        <div class="sidenav">
+            <ul>
+                <li><a href="dashboard.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/es7o8fr6dw2vkkywjpg66/dashboard.png?rlkey=pp0dy252j9wao81jpz1n50f4p&st=83lbnbnz&dl=1" class="sidebar-icon">Dashboard</a></li>
+                <li><a href="notification.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/te9qkrjtunarm8znvfs1w/notification.png?rlkey=kqzy50yimgtro1l8caiqnqbua&st=4zuvr1p0&dl=1" class="sidebar-icon">Notification</a></li>
+                <li><a href="user-account.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/tnounxbo8vd5763gnoysp/userAccount.png?rlkey=hyos7zrh4ghwr66mjivsqfd5b&st=4ko3y2wy&dl=1" class="sidebar-icon">User Account</a></li>
+                <li><a href="residents.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/e57yqafcdt0z58wbgvv9e/residents.png?rlkey=wcqigcrhwveax3qubldx0qaql&st=np6th3hf&dl=1" class="sidebar-icon">Residents</a></li>
+                <li><a href="complaints.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/kbs0xnrc9usw40lv30clw/scales-of-justice.png?rlkey=d36ewu4dge121egpw53qri8mf&st=r04p7f12&dl=1" class="sidebar-icon">Complaints</a></li>
+                <li><a href="barangay-id.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/5bv5aqyto4z9york6lzwq/id-card.png?rlkey=crbfg36zcmb1tq9yfdg0t8zm2&st=ocm8u8fd&dl=1" class="sidebar-icon">Barangay ID</a></li>
+                <li><a href="request.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/idqomcr0ujnsmd54ktpu5/quote-request.png?rlkey=swquji94hs61jlr8y0p992s0n&st=vkr8y4i7&dl=1" class="sidebar-icon">Requests</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Justice System</h2>
+            <div class="user-info">
+                <div class="dropdown">
+                    <img src="https://www.dropbox.com/scl/fi/oedqyjb59kspzdylesk6y/user.png?rlkey=1axl685fxswp7olj90dbgu53y&st=7jh50r8n&dl=1" alt="User Avatar" class="dropbtn" onclick="toggleDropdown()">
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="admin-details.html" onclick="viewProfile()">User Profile</a>
+                        <a href="module.html">Maintenance</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="search-and-actions">
+            <div class="search-box">
+                <input type="text" placeholder="Search..." oninput="searchBlotterAndKasunduan()">
+            </div>
+            <div class="filter-box">
+                <select onchange="navigateToPage(this)">
+                    <option value="blotter.html" selected>Processing</option>
+                    <option value="blotter-complete.html">Completed</option>
+                </select>
+            </div>
+            <div class="account-actions">
+                <!-- Add Modal Triggers -->
+                <button class="add-btn" onclick="openAddModal()">Add Complaint</button>
+                <button class="add-btn" onclick="openAddKasunduanModal()">Add Kasunduan</button>
+            </div>
+        </div>
+
+        <!-- Complaint Table -->
+        <div class="account-content">
+            <h3>Blotter</h3>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Complainant's Name</th>
+                            <th>Complainee's Name</th>
+                            <th>Blotter</th>
+                            <th>Justice on Duty</th>
+                            <th>Hearing Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="complaint-table-body">
+                        <!-- Rows will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Kasunduan Table -->
+<div class="account-content">
+    <h3>Kasunduan</h3>
+    <div class="table-scroll"> <!-- Updated class for scrolling -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Complainant's Name</th>
+                    <th>Complainee's Name</th>
+                    <th>Kasunduan</th>
+                    <th>Justice on Duty</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="kasunduan-table-body">
+                <!-- Rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+        <!-- Add Complaint Modal -->
+        <div id="addModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeAddModal()">&times;</span>
+                <h2>ADD COMPLAINT</h2>
+                <form id="addComplaintForm">
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <input type="date" id="date" placeholder=" " required>
+                            <label for="date">Date</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="time" id="time" placeholder=" " required>
+                            <label for="time">Time</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <!-- Complainant's Name (First Name, Middle Name, Last Name) -->
+                        <div class="floating-label">
+                            <input type="text" id="complainantFirstName" placeholder=" " required>
+                            <label for="complainantFirstName">Complainant's First Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="complainantMiddleName" placeholder=" " required>
+                            <label for="complainantMiddleName">Complainant's Middle Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="complainantLastName" placeholder=" " required>
+                            <label for="complainantLastName">Complainant's Last Name</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                    <!-- Complainee's Name (First Name, Middle Name, Last Name) -->
+                        <div class="floating-label">
+                            <input type="text" id="complaineeFirstName" placeholder=" " required>
+                            <label for="complaineeFirstName">Complainee's First Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="complaineeMiddleName" placeholder=" " required>
+                            <label for="complaineeMiddleName">Complainee's Middle Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="complaineeLastName" placeholder=" " required>
+                            <label for="complaineeLastName">Complainee's Last Name</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <textarea id="blotter" placeholder=" " required></textarea>
+                            <label for="blotter">Blotter</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <select id="justiceOnDuty" required>
+                                <option value="" disabled selected>Select Justice on Duty</option>
+                            </select>
+                            <label for="justiceOnDuty">Justice on Duty</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="date" id="hearingDate" placeholder=" " required>
+                            <label for="hearingDate">Hearing Date</label>
+                        </div>
+                        <div class="floating-label">
+                            <select id="status" required>
+                                <option value="Processing">Processing</option>
+                            </select>
+                            <label for="status">Status</label>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit" class="add-btn">Add Complaint</button>
+                        <button type="button" class="cancel-btn" onclick="closeAddModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Kasunduan Modal -->
+        <div id="addKasunduanModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeAddKasunduanModal()">&times;</span>
+                <h2>ADD KASUNDUAN</h2>
+                <form id="addKasunduanForm">
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <input type="date" id="kasunduanDate" placeholder=" " required>
+                            <label for="kasunduanDate">Date</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="time" id="kasunduanTime" placeholder=" " required>
+                            <label for="kasunduanTime">Time</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <!-- Complainant's Name (First Name, Middle Name, Last Name) -->
+                        <div class="floating-label">
+                            <input type="text" id="kasunduanComplainantFirstName" placeholder=" " required>
+                            <label for="kasunduanComplainantFirstName">Complainant's First Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="kasunduanComplainantMiddleName" placeholder=" " required>
+                            <label for="kasunduanComplainantMiddleName">Complainant's Middle Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="kasunduanComplainantLastName" placeholder=" " required>
+                            <label for="kasunduanComplainantLastName">Complainant's Last Name</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <!-- Complainee's Name (First Name, Middle Name, Last Name) -->
+                        <div class="floating-label">
+                            <input type="text" id="kasunduanComplaineeFirstName" placeholder=" " required>
+                            <label for="kasunduanComplaineeFirstName">Complainee's First Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="kasunduanComplaineeMiddleName" placeholder=" " required>
+                            <label for="kasunduanComplaineeMiddleName">Complainee's Middle Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="kasunduanComplaineeLastName" placeholder=" " required>
+                            <label for="kasunduanComplaineeLastName">Complainee's Last Name</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <textarea id="kasunduanText" placeholder=" " required></textarea>
+                            <label for="kasunduanText">Kasunduan</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <select id="kasunduanJusticeOnDuty" required>
+                                <option value="" disabled selected>Select Justice on Duty</option>
+                            </select>
+                            <label for="kasunduanJusticeOnDuty">Justice on Duty</label>
+                        </div>
+                        <div class="floating-label">
+                            <select id="kasunduanStatus" required>
+                                <option value="Processing">Processing</option>
+                            </select>
+                            <label for="kasunduanStatus">Status</label>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit" class="add-btn">Add Kasunduan</button>
+                        <button type="button" class="cancel-btn" onclick="closeAddKasunduanModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit Complaint Modal -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditModal()">&times;</span>
+                <h2>EDIT COMPLAINT</h2>
+                <form id="editComplaintForm">
+                    <input type="hidden" id="editId">
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <input type="date" id="editDate" placeholder=" " required>
+                            <label for="editDate">Date</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="time" id="editTime" placeholder=" " required>
+                            <label for="editTime">Time</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <!-- Complainant's Name (First Name, Middle Name, Last Name) -->
+                        <div class="floating-label">
+                            <input type="text" id="editComplainantFirstName" placeholder=" " required>
+                            <label for="editComplainantFirstName">Complainant's First Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editComplainantMiddleName" placeholder=" " required>
+                            <label for="editComplainantMiddleName">Complainant's Middle Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editComplainantLastName" placeholder=" " required>
+                            <label for="editComplainantLastName">Complainant's Last Name</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <!-- Complainee's Name (First Name, Middle Name, Last Name) -->
+                        <div class="floating-label">
+                            <input type="text" id="editComplaineeFirstName" placeholder=" " required>
+                            <label for="editComplaineeFirstName">Complainee's First Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editComplaineeMiddleName" placeholder=" " required>
+                            <label for="editComplaineeMiddleName">Complainee's Middle Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editComplaineeLastName" placeholder=" " required>
+                            <label for="editComplaineeLastName">Complainee's Last Name</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <textarea id="editBlotter" placeholder=" " required></textarea>
+                            <label for="editBlotter">Blotter</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <select id="editJusticeOnDuty" required>
+                                <option value="" disabled>Select Justice on Duty</option>
+                            </select>
+                            <label for="editJusticeOnDuty">Justice on Duty</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="date" id="editHearingDate" placeholder=" " required>
+                            <label for="editHearingDate">Hearing Date</label>
+                        </div>
+                        <div class="floating-label">
+                            <select id="editStatus" required>
+                                <option value="Processing">Processing</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                            <label for="editStatus">Status</label>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit" class="edit-btn">Save Changes</button>
+                        <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit Kasunduan Modal -->
+        <div id="editKasunduanModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditKasunduanModal()">&times;</span>
+                <h2>EDIT KASUNDUAN</h2>
+                <form id="editKasunduanForm">
+                    <input type="hidden" id="editKasunduanId">
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <input type="date" id="editKasunduanDate" placeholder=" " required>
+                            <label for="editKasunduanDate">Date</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="time" id="editKasunduanTime" placeholder=" " required>
+                            <label for="editKasunduanTime">Time</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <!-- Complainant's Name (First Name, Middle Name, Last Name) -->
+                        <div class="floating-label">
+                            <input type="text" id="editKasunduanComplainantFirstName" placeholder=" " required>
+                            <label for="editKasunduanComplainantFirstName">Complainant's First Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editKasunduanComplainantMiddleName" placeholder=" " required>
+                            <label for="editKasunduanComplainantMiddleName">Complainant's Middle Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editKasunduanComplainantLastName" placeholder=" " required>
+                            <label for="editKasunduanComplainantLastName">Complainant's Last Name</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <!-- Complainee's Name (First Name, Middle Name, Last Name) -->
+                        <div class="floating-label">
+                            <input type="text" id="editKasunduanComplaineeFirstName" placeholder=" " required>
+                            <label for="editKasunduanComplaineeFirstName">Complainee's First Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editKasunduanComplaineeMiddleName" placeholder=" " required>
+                            <label for="editKasunduanComplaineeMiddleName">Complainee's Middle Name</label>
+                        </div>
+                        <div class="floating-label">
+                            <input type="text" id="editKasunduanComplaineeLastName" placeholder=" " required>
+                            <label for="editKasunduanComplaineeLastName">Complainee's Last Name</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <textarea id="editKasunduanText" placeholder=" " required></textarea>
+                            <label for="editKasunduanText">Kasunduan</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="floating-label">
+                            <select id="editKasunduanJusticeOnDuty" required>
+                                <option value="" disabled>Select Justice on Duty</option>
+                            </select>
+                            <label for="editKasunduanJusticeOnDuty">Justice on Duty</label>
+                        </div>
+                        <div class="floating-label">
+                            <select id="editKasunduanStatus" required>
+                                <option value="Processing">Processing</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                            <label for="editKasunduanStatus">Status</label>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit" class="edit-btn">Save Changes</button>
+                        <button type="button" class="cancel-btn" onclick="closeEditKasunduanModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="public/styles/script.js"></script>
+    <script>
+
+        //SEARCH
+        // SEARCH FUNCTION FOR BOTH BLOTTER AND KASUNDUAN
+function searchBlotterAndKasunduan() {
+    // Get the search input value
+    const searchValue = document.querySelector('.search-box input').value.toLowerCase();
+
+    // Search Blotter Table
+    const blotterRows = document.querySelectorAll('#complaint-table-body tr');
+    blotterRows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const matches = Array.from(cells).some(cell => 
+            cell.textContent.toLowerCase().includes(searchValue)
+        );
+        if (matches) {
+            row.style.display = ''; // Show the row
+        } else {
+            row.style.display = 'none'; // Hide the row
+        }
+    });
+
+    // Search Kasunduan Table
+    const kasunduanRows = document.querySelectorAll('#kasunduan-table-body tr');
+    kasunduanRows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const matches = Array.from(cells).some(cell => 
+            cell.textContent.toLowerCase().includes(searchValue)
+        );
+        if (matches) {
+            row.style.display = ''; // Show the row
+        } else {
+            row.style.display = 'none'; // Hide the row
+        }
+    });
+}
+
+
+        // Function to fetch and display Blotter data
+        function fetchBlotterData() {
+
+    fetch('/fetch-blotter')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('complaint-table-body');
+            tableBody.innerHTML = ''; // Clear the table
+
+            data.forEach(item => {
+                const row = `
+                    <tr>
+                        <td>${item.date}</td>
+                        <td>${item.time}</td>
+                        <td>${item.complainantFirstName} ${item.complainantMiddleName} ${item.complainantLastName}</td>
+                        <td>${item.complaineeFirstName} ${item.complaineeMiddleName} ${item.complaineeLastName}</td>
+                        <td>${item.blotter}</td>
+                        <td>${item.justiceOnDuty || ''}</td>
+                        <td>${item.hearingDate}</td>
+                        <td>${item.status}</td>
+                        <td>
+                        <a href="#"><img src="https://www.dropbox.com/scl/fi/u6i83geituweeaybi8y9w/pen.png?rlkey=5f7vjmsrn42d1t0iaxdu3jbjy&st=0sk8r60h&dl=1" alt="Edit" class="edit-icon" onclick="openEditModal('${item._id}', '${item.date}', '${item.time}', '${item.complainantFirstName}', '${item.complainantMiddleName}', '${item.complainantLastName}', 
+                            '${item.complaineeFirstName}', '${item.complaineeMiddleName}', '${item.complaineeLastName}', '${item.blotter}', '${item.justiceOnDuty}', '${item.hearingDate}', '${item.status}')"></a>
+                        <a href="#"><img src="https://www.dropbox.com/scl/fi/ho6y40rqr930v22ja9219/delete.png?rlkey=b1xjg0s1v3rnrgjx1n5v2usgm&st=xgbxk20f&dl=1" alt="Delete" class="delete-icon" onclick="deleteBlotter('${item._id}')"></a>
+                        <a href="#"><img src="https://www.dropbox.com/scl/fi/v185qat4whwt769dbbbya/blueDocument.png?rlkey=uy1zoguvwgxd55x7sw6ki8c6h&st=4jg7gfil&dl=1" alt="Generate" class="generate-icon" onclick="generateBlotter('${item._id}')"></a>
+                        ${item.status === 'Completed' ? `<a href="#"><img src="https://www.dropbox.com/scl/fi/brbnzjxfdeqjerssseaxc/checked.png?rlkey=yinbka4wjvra6n5dxazi4l13a&st=wpwljnp2&dl=1" alt="Transfer" class="transfer-icon" onclick="transferBlotter('${item._id}')"></a>` : ''}
+                    </td>
+                  </tr>`;
+                tableBody.innerHTML += row;
+              });
+            })
+            .catch(error => console.error('Error fetching blotter data:', error));
+        }
+
+         // Function to show the Blotter "Add Complaint" modal
+         function openAddModal() {
+    const addModal = document.getElementById('addModal');
+    addModal.style.display = 'block';
+    populateJusticeOnDutyDropdown(); // Populate the dropdown when the modal opens
+}
+
+document.getElementById('addComplaintForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Get the selected text (name) from the Justice on Duty dropdown
+    const justiceOnDutyDropdown = document.getElementById('justiceOnDuty');
+    const selectedJusticeText = justiceOnDutyDropdown.options[justiceOnDutyDropdown.selectedIndex].text;
+    
+    const newComplaint = {
+        date: document.getElementById('date').value,
+        time: document.getElementById('time').value,
+        complainantFirstName: document.getElementById('complainantFirstName').value,
+        complainantMiddleName: document.getElementById('complainantMiddleName').value,
+        complainantLastName: document.getElementById('complainantLastName').value,
+        complaineeFirstName: document.getElementById('complaineeFirstName').value,
+        complaineeMiddleName: document.getElementById('complaineeMiddleName').value,
+        complaineeLastName: document.getElementById('complaineeLastName').value,
+        blotter: document.getElementById('blotter').value,
+        justiceOnDuty: selectedJusticeText, // Save the name, not the ID
+        hearingDate: document.getElementById('hearingDate').value,
+        status: document.getElementById('status').value
+    };
+
+    fetch('/add-blotter', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newComplaint)
+    }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                fetchBlotterData(); // Refresh the table
+                closeAddModal(); // Close the modal
+            }
+        }).catch(error => console.error('Error adding complaint:', error));
+});
+
+
+
+        // Function to close the Blotter "Add Complaint" modal
+         function closeAddModal() {
+            const addModal = document.getElementById('addModal');
+            addModal.style.display = 'none';
+        }
+
+// Function to open Edit Modal with pre-filled values
+function openEditModal(id, date, time, complainantFirstName, complainantMiddleName, complainantLastName, complaineeFirstName, complaineeMiddleName, complaineeLastName, blotter, justiceOnDuty, hearingDate, status) {
+    const editModal = document.getElementById('editModal');
+    editModal.style.display = 'block';
+
+    // Fill the form fields with the existing data
+    document.getElementById('editId').value = id;
+    document.getElementById('editDate').value = date;
+    document.getElementById('editTime').value = time;
+    document.getElementById('editComplainantFirstName').value = complainantFirstName;
+    document.getElementById('editComplainantMiddleName').value = complainantMiddleName;
+    document.getElementById('editComplainantLastName').value = complainantLastName;
+    document.getElementById('editComplaineeFirstName').value = complaineeFirstName;
+    document.getElementById('editComplaineeMiddleName').value = complaineeMiddleName;
+    document.getElementById('editComplaineeLastName').value = complaineeLastName;
+    document.getElementById('editBlotter').value = blotter;
+    document.getElementById('editHearingDate').value = hearingDate;
+    document.getElementById('editStatus').value = status;
+
+    // Populate the Justice on Duty dropdown
+    populateEditJusticeOnDutyDropdown(justiceOnDuty);
+}
+
+        // Edit Complaint Form submission
+// Edit Complaint Form submission
+document.getElementById('editComplaintForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const id = document.getElementById('editId').value;
+    const updatedData = {
+        date: document.getElementById('editDate').value,
+        time: document.getElementById('editTime').value,
+        complainantFirstName: document.getElementById('editComplainantFirstName').value,
+        complainantMiddleName: document.getElementById('editComplainantMiddleName').value,
+        complainantLastName: document.getElementById('editComplainantLastName').value,
+        complaineeFirstName: document.getElementById('editComplaineeFirstName').value,
+        complaineeMiddleName: document.getElementById('editComplaineeMiddleName').value,
+        complaineeLastName: document.getElementById('editComplaineeLastName').value,
+        blotter: document.getElementById('editBlotter').value,
+        justiceOnDuty: document.getElementById('editJusticeOnDuty').value,
+        hearingDate: document.getElementById('editHearingDate').value,
+        status: document.getElementById('editStatus').value,
+    };
+
+    try {
+        const response = await fetch(`/update-blotter/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData),
+        });
+
+        if (response.ok) {
+            closeEditModal();
+            fetchBlotterData(); // Refresh table data
+        } else {
+            alert('Failed to update blotter.');
+        }
+    } catch (error) {
+        console.error('Error updating blotter:', error);
+    }
+});
+
+        // Close the Edit Modal
+        function closeEditModal() {
+            const editModal = document.getElementById('editModal');
+            editModal.style.display = 'none';
+        }
+
+        function deleteBlotter(id) {
+            if (confirm('Are you sure you want to delete this record?')) {
+                fetch(`/delete-blotter/${id}`, {
+                    method: 'DELETE'
+                }).then(response => {
+                    if (response.ok) {
+                        fetchBlotterData(); // Refresh the table to remove the deleted entry
+                    } else {
+                        alert('Failed to delete blotter.');
+                    }
+                }).catch(error => console.error('Error deleting blotter:', error));
+            }
+        }
+
+        function transferBlotter(id) {
+        // Fetch the specific blotter entry by ID
+            fetch(`/transfer-blotter/${id}`, {
+                method: 'PUT', // We are using PUT because we are modifying/transfering data
+                headers: {
+                    'Content-Type': 'application/json'
+                }       
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // If transfer was successful, reload the blotter table
+                    alert('Blotter transferred successfully!');
+                    fetchBlotterData();
+                } else {
+                    alert('Failed to transfer blotter.');
+                }
+            })
+            .catch(error => console.error('Error transferring blotter:', error));
+        }
+
+        
+
+      
+        // Function to Kasunduan data
+        function fetchKasunduanData() {
+          fetch('/fetch-kasunduan')
+            .then(response => response.json())
+            .then(data => {
+              const tableBody = document.getElementById('kasunduan-table-body');
+              tableBody.innerHTML = ''; // Clear the table
+              data.forEach(item => {
+                const row = `
+                  <tr>
+                            <td>${item.date}</td>
+                            <td>${item.time}</td>
+                            <td>${item.complainantFirstName} ${item.complainantMiddleName} ${item.complainantLastName}</td>
+                            <td>${item.complaineeFirstName} ${item.complaineeMiddleName} ${item.complaineeLastName}</td>
+                            <td>${item.kasunduan}</td>
+                            <td>${item.justiceOnDuty}</td>
+                            <td>${item.status}</td>
+                            <td>
+                        <a href="#"><img src="https://www.dropbox.com/scl/fi/u6i83geituweeaybi8y9w/pen.png?rlkey=5f7vjmsrn42d1t0iaxdu3jbjy&st=0sk8r60h&dl=1" alt="Edit" class="edit-icon" onclick="openEditKasunduanModal('${item._id}', '${item.date}', '${item.time}', '${item.complainantFirstName}', '${item.complainantMiddleName}', '${item.complainantLastName}', '${item.complaineeFirstName}', '${item.complaineeMiddleName}', '${item.complaineeLastName}', '${item.kasunduan}', '${item.justiceOnDuty}', '${item.status}')"></a>
+                        <a href="#"><img src="https://www.dropbox.com/scl/fi/ho6y40rqr930v22ja9219/delete.png?rlkey=b1xjg0s1v3rnrgjx1n5v2usgm&st=xgbxk20f&dl=1" alt="Delete" class="delete-icon" onclick="deleteKasunduan('${item._id}')"></a>
+                        <a href="#"><img src="https://www.dropbox.com/scl/fi/v185qat4whwt769dbbbya/blueDocument.png?rlkey=uy1zoguvwgxd55x7sw6ki8c6h&st=4jg7gfil&dl=1" alt="Generate" class="generate-icon" onclick="generateBlotterKasunduan('${item._id}')"></a>
+                        ${item.status === 'Completed' ? `<a href="#"><img src="https://www.dropbox.com/scl/fi/brbnzjxfdeqjerssseaxc/checked.png?rlkey=yinbka4wjvra6n5dxazi4l13a&st=wpwljnp2&dl=1" alt="Transfer" class="transfer-icon" onclick="transferKasunduan('${item._id}')"></a>` : ''}
+                    </td>
+                  </tr>`;
+                tableBody.innerHTML += row;
+              });
+            })
+            .catch(error => console.error('Error fetching kasunduan data:', error));
+        }
+
+        // Function to show the Kasunduan "Add Kasunduan" modal
+        function openAddKasunduanModal() {
+            const addKasunduanModal = document.getElementById('addKasunduanModal');
+            addKasunduanModal.style.display = 'block';
+            populateKasunduanJusticeOnDutyDropdown();
+        }
+
+        document.getElementById('addKasunduanForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Get the selected text (name) from the Justice on Duty dropdown
+    const kasunduanJusticeOnDutyDropdown = document.getElementById('kasunduanJusticeOnDuty');
+    const selectedJusticeText = kasunduanJusticeOnDutyDropdown.options[kasunduanJusticeOnDutyDropdown.selectedIndex].text;
+
+    const newKasunduan = {
+        date: document.getElementById('kasunduanDate').value,
+        time: document.getElementById('kasunduanTime').value,
+        complainantFirstName: document.getElementById('kasunduanComplainantFirstName').value,
+        complainantMiddleName: document.getElementById('kasunduanComplainantMiddleName').value,
+        complainantLastName: document.getElementById('kasunduanComplainantLastName').value,
+        complaineeFirstName: document.getElementById('kasunduanComplaineeFirstName').value,
+        complaineeMiddleName: document.getElementById('kasunduanComplaineeMiddleName').value,
+        complaineeLastName: document.getElementById('kasunduanComplaineeLastName').value,
+        kasunduan: document.getElementById('kasunduanText').value,
+        justiceOnDuty: selectedJusticeText, // Save the name, not the ID
+        status: document.getElementById('kasunduanStatus').value
+    };
+
+    fetch('/add-kasunduan', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newKasunduan)
+    }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                fetchKasunduanData(); // Refresh the table
+                closeAddKasunduanModal(); // Close the modal
+            }
+        }).catch(error => console.error('Error adding kasunduan:', error));
+});
+
+
+function openEditKasunduanModal(id, date, time, complainantFirstName, complainantMiddleName, complainantLastName, complaineeFirstName, complaineeMiddleName, complaineeLastName, kasunduan, justiceOnDuty, status) {
+    const editKasunduanModal = document.getElementById('editKasunduanModal');
+    editKasunduanModal.style.display = 'block';
+
+    // Populate the form fields
+    document.getElementById('editKasunduanId').value = id;
+    document.getElementById('editKasunduanDate').value = date;
+    document.getElementById('editKasunduanTime').value = time;
+    document.getElementById('editKasunduanComplainantFirstName').value = complainantFirstName;
+    document.getElementById('editKasunduanComplainantMiddleName').value = complainantMiddleName;
+    document.getElementById('editKasunduanComplainantLastName').value = complainantLastName;
+    document.getElementById('editKasunduanComplaineeFirstName').value = complaineeFirstName;
+    document.getElementById('editKasunduanComplaineeMiddleName').value = complaineeMiddleName;
+    document.getElementById('editKasunduanComplaineeLastName').value = complaineeLastName;
+    document.getElementById('editKasunduanText').value = kasunduan;
+    document.getElementById('editKasunduanStatus').value = status;
+
+    // Populate and pre-select the Justice on Duty dropdown
+    populateEditKasunduanJusticeOnDutyDropdown(justiceOnDuty);
+}
+
+document.getElementById('editKasunduanForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const id = document.getElementById('editKasunduanId').value;
+    const updatedData = {
+        date: document.getElementById('editKasunduanDate').value,
+        time: document.getElementById('editKasunduanTime').value,
+        complainantFirstName: document.getElementById('editKasunduanComplainantFirstName').value,
+        complainantMiddleName: document.getElementById('editKasunduanComplainantMiddleName').value,
+        complainantLastName: document.getElementById('editKasunduanComplainantLastName').value,
+        complaineeFirstName: document.getElementById('editKasunduanComplaineeFirstName').value,
+        complaineeMiddleName: document.getElementById('editKasunduanComplaineeMiddleName').value,
+        complaineeLastName: document.getElementById('editKasunduanComplaineeLastName').value,
+        kasunduan: document.getElementById('editKasunduanText').value,
+        justiceOnDuty: document.getElementById('editKasunduanJusticeOnDuty').value,  // Save justice name
+        status: document.getElementById('editKasunduanStatus').value
+    };
+
+    try {
+        const response = await fetch(`/update-kasunduan/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData),
+        });
+
+        if (response.ok) {
+            closeEditKasunduanModal();
+            fetchKasunduanData();  // Refresh table
+        } else {
+            alert('Failed to update Kasunduan.');
+        }
+    } catch (error) {
+        console.error('Error updating Kasunduan:', error);
+    }
+});
+
+        function closeEditKasunduanModal() {
+            const editKasunduanModal = document.getElementById('editKasunduanModal');
+            editKasunduanModal.style.display = 'none';
+        }
+
+        function deleteKasunduan(id) {
+            if (confirm('Are you sure you want to delete this record?')) {
+                fetch(`/delete-kasunduan/${id}`, {
+                    method: 'DELETE'
+                }).then(response => {
+                    if (response.ok) {
+                        fetchKasunduanData(); // Refresh the table to remove the deleted entry
+                    } else {
+                        alert('Failed to delete kasunduan.');
+                    }
+                 }).catch(error => console.error('Error deleting kasunduan:', error));
+            }
+        }
+
+        function transferKasunduan(id) {
+            fetch(`/transfer-kasunduan/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Kasunduan transferred successfully!');
+                    fetchKasunduanData();
+                } else {
+                    alert('Failed to transfer kasunduan.');
+                }
+            })
+            .catch(error => console.error('Error transferring kasunduan:', error));
+        }
+
+
+        // Function to close the Kasunduan "Add Kasunduan" modal
+        function closeAddKasunduanModal() {
+            const addKasunduanModal = document.getElementById('addKasunduanModal');
+            addKasunduanModal.style.display = 'none';
+        }
+      
+        // Call the fetch functions on page load
+        window.onload = function() {
+          fetchBlotterData();
+          fetchKasunduanData();
+        };
+
+        // Add event listeners for close buttons (in case you have close buttons in modals)
+        window.onclick = function(event) {
+            const addModal = document.getElementById('addModal');
+            const addKasunduanModal = document.getElementById('addKasunduanModal');
+    
+            if (event.target === addModal) {
+            addModal.style.display = 'none';
+            }
+            if (event.target === addKasunduanModal) {
+            addKasunduanModal.style.display = 'none';
+            }
+        }
+
+        // GENERATE BLOTTER AND KASUNDUAN
+    
+// Generate Blotter
+function generateBlotter(id) {
+    fetch(`/fetch-blotter/${id}`)
+    .then(response => response.json())
+    .then(data => {
+        const params = new URLSearchParams({
+    date: data.date,
+    time: data.time,
+    complainantFirstName: data.complainantFirstName || '',
+    complainantMiddleName: data.complainantMiddleName || '',
+    complainantLastName: data.complainantLastName || '',
+    complaineeFirstName: data.complaineeFirstName || '',
+    complaineeMiddleName: data.complaineeMiddleName || '',
+    complaineeLastName: data.complaineeLastName || '',
+    blotter: data.blotter || '',
+    justiceOnDuty: data.justiceOnDuty || '',
+    hearingDate: data.hearingDate || ''
+});
+
+      // Redirect to the blotter page with the parameters
+      window.location.href = `generate-blotter.html?${params.toString()}`;
+    })
+    .catch(error => console.error('Error generating blotter:', error));
+}
+
+
+// Generate Kasunduan
+function generateBlotterKasunduan(id) {
+  fetch(`/fetch-blotter-kasunduan/${id}`)
+  .then(response => response.json())
+    .then(data => {
+      const params = new URLSearchParams({
+        date: data.date,
+        time: data.time,
+        complainantName: `${data.complainantFirstName} ${data.complainantMiddleName} ${data.complainantLastName}`,
+        complaineeName: `${data.complaineeFirstName} ${data.complaineeMiddleName} ${data.complaineeLastName}`,
+        kasunduan: data.kasunduan,
+        justiceOnDuty: data.justiceOnDuty,
+        status: data.status
+      });
+      // Redirect to generate-kasunduan.html with the data passed in URL
+      window.location.href = `generate-blotter-kasunduan.html?${params.toString()}`;
+    })
+    .catch(error => console.error('Error generating kasunduan:', error));
+}
+
+// Bagong Lagay for Dates
+// Function to set today's date as the minimum date for the Date fields
+function setMinDate() {
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    // Set minimum date for both blotter and kasunduan forms
+    document.getElementById('date').setAttribute('min', today);
+    document.getElementById('hearingDate').setAttribute('min', today);
+    document.getElementById('kasunduanDate').setAttribute('min', today);
+    document.getElementById('editDate').setAttribute('min', today);
+    document.getElementById('editHearingDate').setAttribute('min', today);
+    document.getElementById('editKasunduanDate').setAttribute('min', today);
+}
+
+// Call the setMinDate function when the window loads
+window.onload = function() {
+    setMinDate();
+    fetchBlotterData();
+    fetchKasunduanData();
+};
+
+// DROPDOWN OF JUSTICE ON DUTY
+function populateJusticeOnDutyDropdown() {
+    console.log('Populating Justice on Duty dropdown');
+    fetch('/fetch-justice-on-duty')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); // Log data to verify correct data is returned
+        const dropdown = document.getElementById('justiceOnDuty');
+        dropdown.innerHTML = '<option value="" disabled selected>Select Justice on Duty</option>';
+        
+        data.forEach(person => {
+            const option = document.createElement('option');
+            option.value = person._id;
+            option.textContent = `${person.firstName} ${person.middleName} ${person.lastName}`;
+            dropdown.appendChild(option);
+        });
+    })
+    .catch(error => console.error('Error fetching Justice on Duty:', error));
+}
+
+
+// Make sure this runs when the modal opens
+document.getElementById('addModal').addEventListener('show', populateJusticeOnDutyDropdown);
+
+// for edit complaint
+function populateEditJusticeOnDutyDropdown(selectedJusticeOnDuty) {
+    fetch('/fetch-justice-on-duty')
+    .then(response => response.json())
+    .then(data => {
+        const dropdown = document.getElementById('editJusticeOnDuty');
+        dropdown.innerHTML = '<option value="" disabled>Select Justice on Duty</option>';
+
+        data.forEach(person => {
+            const fullName = `${person.firstName} ${person.middleName} ${person.lastName}`;
+            const option = document.createElement('option');
+            option.value = fullName;  // Use the full name as the value, just like in the add dropdown
+            option.textContent = fullName;
+
+            // If this name matches the selected justice from the complaint, mark it as selected
+            if (selectedJusticeOnDuty === fullName) {
+                option.selected = true;  // Select this option
+            }
+
+            dropdown.appendChild(option);
+        });
+    })
+    .catch(error => console.error('Error fetching Justice on Duty:', error));
+}
+
+// for add kasunduan
+function populateKasunduanJusticeOnDutyDropdown() {
+    fetch('/fetch-justice-on-duty')
+        .then(response => response.json())
+        .then(data => {
+            const dropdown = document.getElementById('kasunduanJusticeOnDuty');
+            dropdown.innerHTML = '<option value="" disabled selected>Select Justice on Duty</option>';
+
+            data.forEach(person => {
+                const fullName = `${person.firstName} ${person.middleName} ${person.lastName}`;
+                const option = document.createElement('option');
+                option.value = fullName;  // Use full name as value
+                option.textContent = fullName;  // Display the full name in dropdown
+                dropdown.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching Justice on Duty:', error));
+}
+
+//for edit kasunduan
+function populateEditKasunduanJusticeOnDutyDropdown(selectedJusticeOnDuty) {
+    fetch('/fetch-justice-on-duty')
+        .then(response => response.json())
+        .then(data => {
+            const dropdown = document.getElementById('editKasunduanJusticeOnDuty');
+            dropdown.innerHTML = '<option value="" disabled>Select Justice on Duty</option>';
+
+            data.forEach(person => {
+                const fullName = `${person.firstName} ${person.middleName} ${person.lastName}`;
+                const option = document.createElement('option');
+                option.value = fullName;  // Use full name as value
+                option.textContent = fullName;  // Display full name in dropdown
+
+                // If the justice in the Kasunduan matches this one, select it
+                if (selectedJusticeOnDuty === fullName) {
+                    option.selected = true;  // Mark this option as selected
+                }
+
+                dropdown.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching Justice on Duty:', error));
+}
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barangay Santa Fe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/user/request-document-cert.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://www.dropbox.com/scl/fi/fan2zv4s27rhmpd7gmtex/brgystafe.png?rlkey=exhrm1gcwkaik313g0r9al119&st=2j1m6lkb&dl=1" alt="Barangay Santa Fe Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="home.html">HOME</a></li>
+                <li><a href="offices.html">OFFICES</a></li>
+                <li><a href="request-document.html">REQUEST DOCUMENT</a></li>
+                <li><a href="home.html#about-section">ABOUT</a></li>
+                <li><a href="home.html#about-section">CONTACT</a></li>
+                <li><a href="#" id="user-icon"><img src="https://www.dropbox.com/scl/fi/tnounxbo8vd5763gnoysp/userAccountWhite.png?rlkey=hyos7zrh4ghwr66mjivsqfd5b&st=07eppc1l&dl=1" alt="user-icon" class="user-icon"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="form-container">
+            <h1>REQUEST DOCUMENT - CERTIFICATE</h1>
+            <form id="requestForm">
+                <!-- Row 1: Names -->
+                <div class="input-row">
+                    <div class="floating-label-group">
+                        <input type="text" name="firstName" id="firstName" placeholder=" " required>
+                        <label for="firstName">First Name</label>
+                    </div>
+                    <div class="floating-label-group">
+                        <input type="text" name="middleName" id="middleName" placeholder=" " required>
+                        <label for="middleName">Middle Name</label>
+                    </div>
+                    <div class="floating-label-group">
+                        <input type="text" name="lastName" id="lastName" placeholder=" " required>
+                        <label for="lastName">Last Name</label>
+                    </div>
+                </div>
+                <!-- Row 2: Age, Purpose-->
+                <div class="input-row">
+                    <div class="floating-label-group">
+                        <input type="number" name="age" placeholder=" " required>
+                        <label for="age">Age</label>
+                    </div>
+                    <div class="floating-label-group">
+                        <input type="text" name="purpose" placeholder=" " required>
+                        <label for="purpose">Purpose</label>
+                    </div>
+                </div>
+                
+                <!-- Hidden input for document type (certificate in this case) -->
+    <input type="hidden" name="documentType" value="certification">
+    <!-- Row 3: Address -->
+    <div class="input-row">
+        <div class="floating-label-group">
+            <input type="text" name="blk" id="blk" placeholder=" " required>
+            <label for="blk">Blk</label>
+        </div>
+        <div class="floating-label-group">
+            <input type="text" name="lot" id="lot" placeholder=" " required>
+            <label for="lot">Lot</label>
+        </div>
+        <div class="floating-label-group">
+            <input type="text" name="street" id="street" placeholder=" " required>
+            <label for="street">Street</label>
+        </div>
+    </div>
+    <div class="input-row">
+        <div class="floating-label-group">
+            <input type="text" name="barangay" id="barangay" value="Santa Fe" readonly required>
+            <label for="barangay">Barangay</label>
+        </div>
+        <div class="floating-label-group">
+            <input type="text" name="city" id="city" value="Dasmariñas" readonly required>
+            <label for="city">City</label>
+        </div>
+        <div class="floating-label-group">
+            <input type="text" name="province" id="province" value="Cavite" readonly required>
+            <label for="province">Province</label>
+        </div>
+    </div>
+    <!-- Submit Button -->
+    <button type="submit">REQUEST</button>
+</form>        
+        </div>        
+    </main>
+
+    <!-- User Profile Popup -->
+    <div id="user-popup" class="user-popup">
+        <div class="user-header">
+            <span>User Options</span>
+            <span class="close-btn" onclick="toggleUserPopup()">&times;</span>
+        </div>
+        <div class="user-content">
+            <a href="user-profile.html">User Profile</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <script src="public/styles/users.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    // Fetch user details when the page loads
+    fetchUserDetails();
+
+    const requestForm = document.getElementById('requestForm');
+    requestForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(requestForm);
+        const fullAddress = `Blk ${formData.get('blk')}, Lot ${formData.get('lot')}, ${formData.get('street')}, ${formData.get('barangay')}, ${formData.get('city')}, ${formData.get('province')}`;
+        
+        const email = formData.get('email'); // Extracting email for notification
+        const requestData = {
+            firstName: formData.get('firstName'),
+            middleName: formData.get('middleName'),
+            lastName: formData.get('lastName'),
+            email: email, // Adding email for payment notification
+            age: formData.get('age'),
+            address: fullAddress,
+            purpose: formData.get('purpose'),
+            status: 'Processing',
+            documentType: 'certification', // Assuming this is for certification, modify if needed
+            dateIssued: ''
+        };
+
+        // First submit the request to the backend
+        fetch('/add-request-document-cert', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // If the request is successful, proceed with generating the payment link
+                return fetch('/request-cert-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestData) // Sending the same data to create the payment link
+                });
+            } else {
+                throw new Error('Failed to submit the document request');
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.paymentLink) {
+                // Update the alert to include the user's email in the message
+                alert(`Your request has been sent! We have sent an email to ${data.email} for the payment link.`);
+            } else {
+                alert('There was an issue processing your request.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while submitting the request or generating the payment link');
+        });
+    });
+});
+        
+        // Function to fetch user details and autofill form fields
+        function fetchUserDetails() {
+            fetch('/user-details')
+                .then(response => response.json())
+                .then(user => {
+                    document.getElementById('firstName').value = user.firstname;
+                    document.getElementById('middleName').value = user.middlename;
+                    document.getElementById('lastName').value = user.lastname;
+                })
+                .catch(error => {
+                    console.error('Error fetching user details:', error);
+                });
+        }
+        
+        // Function to clear user details from local storage if needed
+        function clearUserDetails() {
+            localStorage.removeItem('userDetails');
+        }
+        </script>              
+</body>
+</html>

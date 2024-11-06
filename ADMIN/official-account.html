@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/admin/official.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <center>
+                <img src="https://www.dropbox.com/scl/fi/hplpyx3p3gjc3ozhxa7w6/Dasmarinas-removebg-preview.png?rlkey=bw11d1gi5odcv59ingug5pjeh&st=tl9dj1dk&dl=1" class="Logo">
+                <h1>BARANGAY SANTA FE<br>CITY OF DASMARIÑAS</h1>
+            </center>
+            <div class="sidenav">
+                <ul>
+                    <li><a href="dashboard.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/es7o8fr6dw2vkkywjpg66/dashboard.png?rlkey=pp0dy252j9wao81jpz1n50f4p&st=83lbnbnz&dl=1" class="sidebar-icon">Dashboard</a></li>
+                    <li><a href="notification.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/te9qkrjtunarm8znvfs1w/notification.png?rlkey=kqzy50yimgtro1l8caiqnqbua&st=4zuvr1p0&dl=1" class="sidebar-icon">Notification</a></li>
+                    <li><a href="user-account.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/tnounxbo8vd5763gnoysp/userAccount.png?rlkey=hyos7zrh4ghwr66mjivsqfd5b&st=4ko3y2wy&dl=1" class="sidebar-icon">User Account</a></li>
+                    <li><a href="residents.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/e57yqafcdt0z58wbgvv9e/residents.png?rlkey=wcqigcrhwveax3qubldx0qaql&st=np6th3hf&dl=1" class="sidebar-icon">Residents</a></li>
+                    <li><a href="complaints.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/kbs0xnrc9usw40lv30clw/scales-of-justice.png?rlkey=d36ewu4dge121egpw53qri8mf&st=r04p7f12&dl=1" class="sidebar-icon">Complaints</a></li>
+                    <li><a href="barangay-id.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/5bv5aqyto4z9york6lzwq/id-card.png?rlkey=crbfg36zcmb1tq9yfdg0t8zm2&st=ocm8u8fd&dl=1" class="sidebar-icon">Barangay ID</a></li>
+                    <li><a href="request.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/idqomcr0ujnsmd54ktpu5/quote-request.png?rlkey=swquji94hs61jlr8y0p992s0n&st=vkr8y4i7&dl=1" class="sidebar-icon">Requests</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Official Account</h2>
+            <div class="user-info">
+                <div class="dropdown">
+                    <img src="https://www.dropbox.com/scl/fi/oedqyjb59kspzdylesk6y/user.png?rlkey=1axl685fxswp7olj90dbgu53y&st=7jh50r8n&dl=1" alt="User Avatar" class="dropbtn" onclick="toggleDropdown()">
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="admin-details.html" onclick="viewProfile()">User Profile</a>
+                        <a href="module.html">Maintenance</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="search-and-actions">
+            <div class="search-box">
+                <input type="text" placeholder="Search..." oninput="searchOfficialAccounts()">
+            </div>
+            <div class="filter-box">
+                <select onchange="navigateToPage(this)">
+                    <option value="user-account.html">Resident</option>
+                    <option value="official-account.html" selected>Official</option>
+                </select>
+            </div>
+            <div class="account-actions">
+                <button class="add-btn" onclick="openModal()">Add</button>
+            </div>  
+        </div>
+        <div class="account-content">
+            <h3>Official Accounts</h3>
+            <div class="account-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="account-table-body">
+                        <!-- Data will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>ADD OFFICIAL ACCOUNT</h2>
+            <form id="addForm">
+                <div class="form-row">
+                    <div class="floating-label">
+                        <input type="text" id="firstname" name="firstname" placeholder=" " required>
+                        <label for="firstname">First Name</label>
+                    </div>
+                    <div class="floating-label">
+                        <input type="text" id="middlename" name="middlename" placeholder=" " required>
+                        <label for="middlename">Middle Name</label>
+                    </div>
+                    <div class="floating-label">
+                        <input type="text" id="lastname" name="lastname" placeholder=" " required>
+                        <label for="lastname">Last Name</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="floating-label">
+                        <input type="text" id="username" name="username" placeholder=" " required>
+                        <label for="username">Username</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="floating-label">
+                        <input type="password" id="password" name="password" placeholder=" " required>
+                        <label for="password">Password</label>
+                    </div>
+                    <div class="floating-label">
+                        <input type="password" id="confirmpass" name="confirmpass" placeholder=" " required>
+                        <label for="confirmpass">Confirm Password</label>
+                        <div id="error-message" class="error-message"></div>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button type="submit" class="add-btn">Add</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="public/styles/script.js"></script>
+    <script>
+        // SEARCH
+        function searchOfficialAccounts() {
+            const searchValue = document.querySelector('.search-box input').value.toLowerCase();
+            const rows = document.querySelectorAll('#account-table-body tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const matches = Array.from(cells).some(cell => 
+                    cell.textContent.toLowerCase().includes(searchValue)
+                );
+                row.style.display = matches ? '' : 'none';
+            });
+        }
+
+        // Strong Password
+        function isStrongPassword(password) {
+            const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            return strongPasswordRegex.test(password);
+        }
+
+        // Add Official Account
+// Add Official Account
+function submitAddForm(event) {
+    event.preventDefault();
+
+    const formData = new FormData(document.getElementById('addForm'));
+    const password = formData.get('password');
+    const confirmPassword = formData.get('confirmpass');
+
+    // Check password strength
+    if (!isStrongPassword(password)) {
+        alert('Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.');
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        document.getElementById('error-message').style.display = 'block';
+        return;
+    } else {
+        document.getElementById('error-message').style.display = 'none';
+    }
+
+    // Define newOfficialAccount object with form values
+    const newOfficialAccount = {
+        firstname: formData.get('firstname').trim(),
+        middlename: formData.get('middlename').trim(),
+        lastname: formData.get('lastname').trim(),
+        username: formData.get('username').trim(),
+        password: password.trim()
+    };
+
+    fetch('/admin-accounts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newOfficialAccount)
+    })
+    .then(response => {
+        if (response.ok) {
+            document.querySelector('form').reset(); // Clear the form
+            closeModal();
+            fetchOfficialAccounts(); // Refresh the official accounts table
+        } else {
+            response.text().then(text => alert(text)); // Show error message
+            console.error('Error adding official account:', response.statusText);
+        }
+    })
+    .catch(error => console.error('Error adding official account:', error));
+}
+
+document.getElementById('addForm').addEventListener('submit', submitAddForm);
+
+
+        // Check for Duplicate Username
+document.getElementById('username').addEventListener('blur', function() {
+    const username = this.value.trim();
+    
+    // Check if the username exists in the admin collection
+    fetch(`/check-username-official?username=${username}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                alert('Username already exists. Please choose a different username.');
+                document.getElementById('username').classList.add('error'); // Highlight the field
+            } else {
+                document.getElementById('username').classList.remove('error');
+            }
+        })
+        .catch(error => console.error('Error checking username:', error));
+});
+
+        // Fetch Official Accounts
+        function fetchOfficialAccounts() {
+            fetch('/admin-accounts')  // Fetch data from the server
+                .then(response => response.json())
+                .then(officialAccounts => {
+                    const tableBody = document.querySelector('#account-table-body'); // Find the table body element
+                    tableBody.innerHTML = ''; // Clear any existing rows in the table
+
+                    // Loop through each official account and create a row for the table
+                    officialAccounts.forEach(officialAccount => {
+                    
+                    // Handle missing names by using empty strings if they are undefined
+                    const firstname = officialAccount.firstname || '';
+                    const middlename = officialAccount.middlename || '';
+                    const lastname = officialAccount.lastname || '';
+
+                    // Create a new row
+                    const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${firstname} ${middlename} ${lastname}</td>
+                            <td>${officialAccount.username}</td>
+                            <td>
+                                <span id="password-${officialAccount._id}" data-password="${officialAccount.password}" data-hidden="true">••••••••</span>
+                            </td>
+                            <td>
+                                <a href="#"><img src="https://www.dropbox.com/scl/fi/ho6y40rqr930v22ja9219/delete.png?rlkey=b1xjg0s1v3rnrgjx1n5v2usgm&st=4ysu1b2q&dl=1" alt="Delete" class="delete-icon" onclick="deleteOfficialAccount('${officialAccount._id}')"></a>
+                            </td>
+                        `;
+                        tableBody.appendChild(row); // Append the row to the table body
+                    });
+            })
+            .catch(error => console.error('Error fetching official accounts:', error)); // Handle errors
+        }
+
+
+        function deleteOfficialAccount(id) {
+            if (confirm("Are you sure you want to delete this official account?")) {
+                fetch(`/admin-accounts/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        fetchOfficialAccounts(); // Refresh the official accounts table after deletion
+                    } else {
+                        alert('Failed to delete official account');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting official account:', error);
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchOfficialAccounts(); // Fetch and display official accounts on page load
+        });
+
+    </script>
+</body>
+</html>

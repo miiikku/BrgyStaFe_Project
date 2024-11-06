@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Barangay Santa Fe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/styles/user-profile.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://www.dropbox.com/scl/fi/fan2zv4s27rhmpd7gmtex/brgystafe.png?rlkey=exhrm1gcwkaik313g0r9al119&st=2j1m6lkb&dl=1" alt="Barangay Santa Fe Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="home.html">HOME</a></li>
+                <li><a href="offices.html">OFFICES</a></li>
+                <li><a href="request-document.html">REQUEST DOCUMENT</a></li>
+                <li><a href="home.html#about-section">ABOUT</a></li>
+                <li><a href="home.html#about-section">CONTACT</a></li>
+                <li><a href="#" id="user-icon"><img src="https://www.dropbox.com/scl/fi/tnounxbo8vd5763gnoysp/userAccountWhite.png?rlkey=hyos7zrh4ghwr66mjivsqfd5b&st=07eppc1l&dl=1" alt="user-icon" class="user-icon"></a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="user-profile">
+            <div class="profile-header">
+                <img src="https://www.dropbox.com/scl/fi/oedqyjb59kspzdylesk6y/user.png?rlkey=1axl685fxswp7olj90dbgu53y&st=7jh50r8n&dl=1" alt="Profile Picture" class="profile-pic">
+                <div>
+                    <h1 id="resident-name"></h1>
+                    <p class="username" id="resident-username"><strong>Username:</strong> ${data.username}</p>
+                </div>
+            </div>
+            <div class="profile-details">
+                <div class="detail-group">
+                    <span>Name:</span>
+                    <span id="resident-name-detail"></span>
+                </div>
+                <div class="detail-group">
+                    <span>Voter Status:</span>
+                    <span id="resident-voter-status"></span>
+                </div>
+                <div class="detail-group">
+                    <span>Age:</span>
+                    <span id="resident-age"></span>
+                </div>
+                <div class="detail-group">
+                    <span>PWD/Senior:</span>
+                    <span id="resident-pwd-senior"></span>
+                </div>
+                <div class="detail-group">
+                    <span>Birthdate:</span>
+                    <span id="resident-birthdate"></span>
+                </div>
+                <div class="detail-group">
+                    <span>Address:</span>
+                    <span id="resident-address"></span>
+                </div>
+                <div class="detail-group">
+                    <span>Gender:</span>
+                    <span id="resident-gender"></span>
+                </div>
+                <div class="detail-group">
+                    <span>Starting Date of Residency:</span>
+                    <span id="resident-startdate"></span>
+                </div>
+                <div class="detail-group">
+                    <span>Civil Status:</span>
+                    <span id="resident-civilstatus"></span>
+                </div>
+                <div class="detail-group">
+                    <span>Years Residing:</span>
+                    <span id="resident-yearsresiding"></span>
+                </div>
+                <div class="detail-group">
+                    <span>Contact Number:</span>
+                    <span id="resident-contactnumber"></span>
+                </div>
+                <div class="detail-group">
+                    <span>Email:</span>
+                    <span id="resident-email"></span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+        <!-- User Profile Popup -->
+        <div id="user-popup" class="user-popup">
+            <div class="user-header">
+                <span>User Options</span>
+                <span class="close-btn" onclick="toggleUserPopup()">&times;</span>
+            </div>
+            <div class="user-content">
+                <a href="user-profile.html">User Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+
+    <script src="public/styles/users.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/user-profile-data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('resident-name').textContent = `${data.Firstname} ${data.Middlename} ${data.Lastname}`;
+                    document.getElementById('resident-name-detail').textContent = `${data.Firstname} ${data.Middlename} ${data.Lastname}`;
+                    document.getElementById('resident-username').textContent = `Username: ${data.username}`; 
+                    document.getElementById('resident-birthdate').textContent = data.birthdate;
+                    document.getElementById('resident-age').textContent = data.age;
+                    document.getElementById('resident-gender').textContent = data.gender;
+                    document.getElementById('resident-civilstatus').textContent = data.civilstatus;
+                    document.getElementById('resident-pwd-senior').textContent = data['PWD/Senior'];
+                    document.getElementById('resident-voter-status').textContent = data['Voter Status'];
+                    document.getElementById('resident-contactnumber').textContent = data['Contact Number'];
+                    document.getElementById('resident-address').textContent = data.Address;
+                    document.getElementById('resident-startdate').textContent = data.startDate;
+                    document.getElementById('resident-yearsresiding').textContent = data.yearsresiding;
+                    document.getElementById('resident-email').textContent = data["e-mail"];
+                })
+                .catch(error => console.error('Error fetching profile data:', error));
+        });
+    </script>
+</body>
+</html>

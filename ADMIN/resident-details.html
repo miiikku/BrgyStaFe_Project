@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/styles/styles.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <center>
+                <img src="https://www.dropbox.com/scl/fi/hplpyx3p3gjc3ozhxa7w6/Dasmarinas-removebg-preview.png?rlkey=bw11d1gi5odcv59ingug5pjeh&st=tl9dj1dk&dl=1" class="Logo">
+                <h1>BARANGAY SANTA FE<br>CITY OF DASMARIÑAS</h1>
+            </center>
+            <div class="sidenav">
+                <ul>
+                    <li><a href="dashboard.html" class="sidebar-link">Dashboard</a></li>
+                    <li><a href="notification.html" class="sidebar-link">Notification</a></li>
+                    <li><a href="user-account.html" class="sidebar-link">User Account</a></li>
+                    <li><a href="residents.html" class="sidebar-link">Residents</a></li>
+                    <li><a href="complaints.html" class="sidebar-link">Complaints</a></li>
+                    <li><a href="barangay-id.html" class="sidebar-link">Barangay ID</a></li>
+                    <li><a href="request.html" class="sidebar-link">Requests</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Resident Details</h2>
+            <div class="user-info">
+                <div class="dropdown">
+                    <img src="https://www.dropbox.com/scl/fi/oedqyjb59kspzdylesk6y/user.png?rlkey=1axl685fxswp7olj90dbgu53y&st=7jh50r8n&dl=1" alt="User Avatar" class="dropbtn" onclick="toggleDropdown()">
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="admin-details.html" onclick="viewProfile()">User Profile</a>
+                        <a href="module.html">Maintenance</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="profile-header">
+            <img id="profile-pic" alt="Profile Picture" class="profile-pic">
+            <h1 id="resident-name"></h1>
+        </div>
+        <div class="profile-details">
+            <div class="detail-group">
+                <label>Last Name:</label>
+                <span id="resident-lastname"></span>
+            </div>
+            <div class="detail-group">
+                <label>Voter Status:</label>
+                <span id="resident-voterstatus"></span>
+            </div>
+            <div class="detail-group">
+                <label>First Name:</label>
+                <span id="resident-firstname"></span>
+            </div>
+            <div class="detail-group">
+                <label>PWD/Senior:</label>
+                <span id="resident-pwdsenior"></span>
+            </div>
+            <div class="detail-group">
+                <label>Middle Name:</label>
+                <span id="resident-middlename"></span>
+            </div>
+            <div class="detail-group">
+                <label>Address:</label>
+                <span id="resident-address"></span>
+            </div>
+            <div class="detail-group">
+                <label>Age:</label>
+                <span id="resident-age"></span>
+            </div>
+            <div class="detail-group">
+                <label>Starting Date of Residency:</label>
+                <span id="resident-startdate"></span>
+            </div>
+            <div class="detail-group">
+                <label>Birthdate:</label>
+                <span id="resident-birthdate"></span>
+            </div>
+            <div class="detail-group">
+                <label>Years Residing:</label>
+                <span id="resident-yearsresiding"></span>
+            </div>
+            <div class="detail-group">
+                <label>Gender:</label>
+                <span id="resident-gender"></span>
+            </div>
+            <div class="detail-group">
+                <label>Contact Number:</label>
+                <span id="resident-contactnumber"></span>
+            </div>
+            <div class="detail-group">
+                <label>Civil Status:</label>
+                <span id="resident-civilstatus"></span>
+            </div>
+            <div class="detail-group">
+                <label>Email:</label>
+                <span id="resident-email"></span>
+            </div>
+        </div>
+    </div>
+    <script src="public/styles/script.js"></script>
+    <script>
+        // Function to get query parameter by name
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Function to fetch resident details
+        function fetchResidentDetails() {
+        const residentId = getQueryParam('id');
+        if (!residentId) return;
+
+        fetch(`/residents/${residentId}`)
+            .then(response => response.json())
+            .then(resident => {
+                if (resident) {
+                    document.getElementById('profile-pic').src = resident.Profilepic || 'default-profile-pic.png'; // Default pic if none
+                    document.getElementById('resident-name').textContent = `${resident.Firstname} ${resident.Middlename} ${resident.Lastname}`;
+
+                    // Display username if it exists
+                    if (resident.username) {
+                        const usernameElement = document.createElement('p');
+                        usernameElement.innerHTML = `<strong>Username:</strong> ${resident.username}`;
+                        document.getElementById('resident-name').appendChild(usernameElement);
+                    }
+
+                    document.getElementById('resident-firstname').textContent = resident.Firstname;
+                    document.getElementById('resident-middlename').textContent = resident.Middlename;
+                    document.getElementById('resident-lastname').textContent = resident.Lastname;
+                    document.getElementById('resident-birthdate').textContent = resident.birthdate;
+                    document.getElementById('resident-age').textContent = resident.age;
+                    document.getElementById('resident-gender').textContent = resident.gender;
+                    document.getElementById('resident-civilstatus').textContent = resident.civilstatus;
+                    document.getElementById('resident-pwdsenior').textContent = resident["PWD/Senior"];
+                    document.getElementById('resident-voterstatus').textContent = resident["Voter Status"];
+                    document.getElementById('resident-contactnumber').textContent = resident["Contact Number"];
+                    document.getElementById('resident-address').textContent = resident.Address;
+                    document.getElementById('resident-startdate').textContent = resident.startDate;
+                    document.getElementById('resident-yearsresiding').textContent = resident.yearsresiding;
+                    document.getElementById('resident-email').textContent = resident["e-mail"];
+                }
+            })
+            .catch(error => console.error('Error fetching resident details:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchResidentDetails);
+    </script>
+</body>
+</html>

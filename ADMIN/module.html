@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/admin/module.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <center>
+                <img src="https://www.dropbox.com/scl/fi/hplpyx3p3gjc3ozhxa7w6/Dasmarinas-removebg-preview.png?rlkey=bw11d1gi5odcv59ingug5pjeh&st=tl9dj1dk&dl=1" class="Logo">
+                <h1>BARANGAY SANTA FE<br>CITY OF DASMARIÑAS</h1>
+            </center>
+            <div class="sidenav">
+                <ul>
+                    <li><a href="dashboard.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/es7o8fr6dw2vkkywjpg66/dashboard.png?rlkey=pp0dy252j9wao81jpz1n50f4p&st=83lbnbnz&dl=1" class="sidebar-icon">Dashboard</a></li>
+                    <li><a href="notification.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/te9qkrjtunarm8znvfs1w/notification.png?rlkey=kqzy50yimgtro1l8caiqnqbua&st=4zuvr1p0&dl=1" class="sidebar-icon">Notification</a></li>
+                    <li><a href="user-account.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/tnounxbo8vd5763gnoysp/userAccount.png?rlkey=hyos7zrh4ghwr66mjivsqfd5b&st=4ko3y2wy&dl=1" class="sidebar-icon">User Account</a></li>
+                    <li><a href="residents.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/e57yqafcdt0z58wbgvv9e/residents.png?rlkey=wcqigcrhwveax3qubldx0qaql&st=np6th3hf&dl=1" class="sidebar-icon">Residents</a></li>
+                    <li><a href="complaints.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/kbs0xnrc9usw40lv30clw/scales-of-justice.png?rlkey=d36ewu4dge121egpw53qri8mf&st=r04p7f12&dl=1" class="sidebar-icon">Complaints</a></li>
+                    <li><a href="barangay-id.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/5bv5aqyto4z9york6lzwq/id-card.png?rlkey=crbfg36zcmb1tq9yfdg0t8zm2&st=ocm8u8fd&dl=1" class="sidebar-icon">Barangay ID</a></li>
+                    <li><a href="request.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/idqomcr0ujnsmd54ktpu5/quote-request.png?rlkey=swquji94hs61jlr8y0p992s0n&st=vkr8y4i7&dl=1" class="sidebar-icon">Requests</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h2>Maintenance</h2>
+            <div class="user-info">
+                <div class="dropdown">
+                    <img src="https://www.dropbox.com/scl/fi/oedqyjb59kspzdylesk6y/user.png?rlkey=1axl685fxswp7olj90dbgu53y&st=7jh50r8n&dl=1" alt="User Avatar" class="dropbtn" onclick="toggleDropdown()">
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="admin-details.html">User Profile</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-and-actions">
+            <div class="search-box">
+                <input type="text" placeholder="Search..." oninput="searchModules()">
+            </div>
+            <div class="account-actions">
+                <button class="add-btn" onclick="openAddOfficialModal()">Add</button>
+                <!-- Add Official Modal -->
+                <div id="addOfficialModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeAddOfficialModal()">&times;</span>
+                        <form id="addOfficialForm">
+                            <h2>Add Elected Official</h2>
+                            <!-- Profile Picture Input -->
+                            <div class="form-row file-input">
+                                <input type="file" id="officialPhoto" name="photo" accept="image/*" required>
+                            </div>
+
+                            <!-- Name Fields -->
+                            <div class="form-row">
+                                <div class="floating-label">
+                                    <input type="text" id="firstName" name="firstName" placeholder=" " required>
+                                    <label for="firstName">First Name</label>
+                                </div>
+                                <div class="floating-label">
+                                    <input type="text" id="middleName" name="middleName" placeholder=" ">
+                                    <label for="middleName">Middle Name</label>
+                                </div>
+                                <div class="floating-label">
+                                    <input type="text" id="lastName" name="lastName" placeholder=" " required>
+                                    <label for="lastName">Last Name</label>
+                                </div>
+                            </div>
+
+                            <!-- Position Dropdown -->
+                            <div class="form-row">
+                                <div class="floating-label">
+                                    <select id="position" name="position" required>
+                                        <option value="Position in Barangay" disabled selected></option>
+                                        <option value="Punong Barangay">Punong Barangay</option>
+                                        <option value="Secretary">Secretary</option>
+                                        <option value="Treasurer">Treasurer</option>
+                                        <option value="Kagawad">Kagawad</option>
+                                        <option value="SK Chairperson">SK Chairperson</option>
+                                        <option value="Lupon Chairperson">Lupon Chairperson</option>
+                                        <option value="Lupon Tagapamayapa">Lupon Tagapamayapa</option>
+                                        <option value="Imbestigador">Imbestigador</option>
+                                        <option value="Chief Tanod">Chief Tanod</option>
+                                        <option value="Deputy Chief Tanod">Deputy Chief Tanod</option>
+                                        <option value="Tanod">Tanod</option>
+                                    </select>
+                                    <label for="position">Position</label>
+                                </div>
+                            </div>
+
+                            <!-- Submit and Cancel Buttons -->
+                            <div class="button-container">
+                                <button type="submit" class="add-btn">Add</button>
+                                <button type="button" class="cancel-btn" onclick="closeAddOfficialModal()">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="account-content">
+            <h3>Current Elected Officers</h3>
+            <div class="account-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Picture</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="module-table-body">
+                        <!-- Module rows will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<!-- Edit Official Modal -->
+<div id="editOfficialModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditOfficialModal()">&times;</span>
+        <form id="editOfficialForm">
+            <h2>Edit Elected Official</h2>
+            <input type="hidden" id="editOfficialId">
+            
+            <!-- Profile Picture Input -->
+            <div class="form-row file-input">
+                <input type="file" id="editOfficialPhoto" name="photo" accept="image/*">
+            </div>
+            
+            <!-- Name Fields -->
+            <div class="form-row">
+                <div class="floating-label">
+                    <input type="text" id="editFirstName" name="firstName" placeholder=" " required>
+                    <label for="firstName">First Name</label>
+                </div>
+                <div class="floating-label">
+                    <input type="text" id="editMiddleName" name="middleName" placeholder=" ">
+                    <label for="middleName">Middle Name</label>
+                </div>
+                <div class="floating-label">
+                    <input type="text" id="editLastName" name="lastName" placeholder=" " required>
+                    <label for="lastName">Last Name</label>
+                </div>
+            </div>
+
+            <!-- Position Dropdown -->
+            <div class="form-row">
+                <div class="floating-label">
+                    <select id="editPosition" name="position" required>
+                        <option value="Position in Barangay" disabled selected></option>
+                        <option value="Punong Barangay">Punong Barangay</option>
+                        <option value="Secretary">Secretary</option>
+                        <option value="Treasurer">Treasurer</option>
+                        <option value="Kagawad">Kagawad</option>
+                        <option value="SK Chairperson">SK Chairperson</option>
+                        <option value="Lupon Chairperson">Lupon Chairperson</option>
+                        <option value="Lupon Tagapamayapa">Lupon Tagapamayapa</option>
+                        <option value="Imbestigador">Imbestigador</option>
+                        <option value="Chief Tanod">Chief Tanod</option>
+                        <option value="Deputy Chief Tanod">Deputy Chief Tanod</option>
+                        <option value="Tanod">Tanod</option>
+                    </select>
+                    <label for="position">Position</label>
+                </div>
+            </div>
+
+            <!-- Submit and Cancel Buttons -->
+            <div class="button-container">
+                <button type="submit" class="add-btn">Save</button>
+                <button type="button" class="cancel-btn" onclick="closeEditOfficialModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+    <script src="public/styles/script.js"></script>
+    <script>
+        // Function to fetch and display modules
+        function fetchModules() {
+            fetch('/modules')
+                .then(response => response.json())
+                .then(modules => {
+                    const tableBody = document.getElementById('module-table-body');
+                    tableBody.innerHTML = ''; // Clear any existing rows
+
+                    modules.forEach(module => {
+                        // Concatenate first, middle, and last names properly
+                        const fullName = `${module.firstName} ${module.middleName} ${module.lastName}`;
+                
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td><img src="${module.Profilepic}" alt="Module Picture" class="table-image"></td>
+                            <td>${fullName}</td>
+                            <td>${module.position}</td>
+                            <td>
+                                <a href="#"><img src="https://www.dropbox.com/scl/fi/u6i83geituweeaybi8y9w/pen.png?rlkey=5f7vjmsrn42d1t0iaxdu3jbjy&st=0sk8r60h&dl=1" alt="Edit" class="edit-icon" onclick="openEditModal('${module._id}')"></a>
+                                <a href="#"><img src="https://www.dropbox.com/scl/fi/ho6y40rqr930v22ja9219/delete.png?rlkey=b1xjg0s1v3rnrgjx1n5v2usgm&st=xgbxk20f&dl=1" alt="Delete" class="delete-icon" onclick="deleteModule('${module._id}')"></a>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+            .catch(error => console.error('Error fetching modules:', error));
+        }
+    
+        // Load the modules when the page loads
+        document.addEventListener('DOMContentLoaded', fetchModules);
+
+                // Function to open the modal
+                function openAddOfficialModal() {
+            document.getElementById("addOfficialModal").style.display = "block";
+        }
+
+        // Function to close the modal
+        function closeAddOfficialModal() {
+            document.getElementById("addOfficialModal").style.display = "none";
+            document.querySelector('form').reset();
+        }
+
+        // Function to handle form submission
+        document.getElementById('addOfficialForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the form from submitting the usual way
+
+        const formData = new FormData(this);
+        const newOfficial = {
+            firstName: formData.get('firstName'),
+            middleName: formData.get('middleName'),
+            lastName: formData.get('lastName'),
+            position: formData.get('position'),
+            Profilepic: formData.get('photo')
+        };
+
+        // Send the new official data to the server
+        fetch('/modules', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newOfficial)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                closeAddOfficialModal(); // Close the modal
+                document.querySelector('form').reset(); // reset form
+                fetchModules(); // Refresh the table
+            } else {
+                // If position exists error is returned, show an alert
+                alert(data.message); 
+            }
+        })
+        .catch(error => console.error('Error adding official:', error));
+    });
+
+        function openEditModal(id) {
+            fetch(`/modules/${id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Official not found: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(module => {
+                    // Populate modal with official's data
+                    document.getElementById('editOfficialId').value = module._id;
+                    document.getElementById('editFirstName').value = module.firstName;
+                    document.getElementById('editMiddleName').value = module.middleName;
+                    document.getElementById('editLastName').value = module.lastName;
+                    document.getElementById('editPosition').value = module.position;
+
+                    // Handle the profile picture
+                    if (module.Profilepic) {
+                        document.getElementById('editOfficialPhoto').src = module.Profilepic;
+                    }
+
+                    // Open the modal
+                    document.getElementById('editOfficialModal').style.display = 'block';
+                })
+                .catch(error => console.error('Error fetching official:', error));
+        }
+
+        document.getElementById('editOfficialForm').addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent the form from submitting the usual way
+
+    const id = document.getElementById('editOfficialId').value;
+    const updatedOfficial = {
+        firstName: document.getElementById('editFirstName').value,
+        middleName: document.getElementById('editMiddleName').value,
+        lastName: document.getElementById('editLastName').value,
+        position: document.getElementById('editPosition').value,
+        Profilepic: document.getElementById('editOfficialPhoto').files[0] // Handle file
+    };
+
+    fetch(`/modules/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedOfficial)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            closeEditOfficialModal(); // Close the modal
+            fetchModules(); // Refresh the table
+        } else {
+            // If there is a validation error, show an alert with the message
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error('Error updating official:', error));
+});
+
+
+        function closeEditOfficialModal() {
+            document.getElementById('editOfficialModal').style.display = 'none';
+        }
+
+        // Function to delete an official from the module collection and frontend table
+        function deleteModule(id) {
+            if (confirm('Are you sure you want to delete this official?')) {
+                fetch(`/modules/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        fetchModules(); // Refresh the table to remove the deleted official
+                        alert('Official deleted successfully');
+                    } else if (response.status === 404) {
+                        alert('Official not found');
+                    } else {
+                        console.error('Failed to delete official');
+                    }
+                })
+                .catch(error => console.error('Error deleting official:', error));
+            }
+        }
+
+    </script>
+    
+</body>
+</html>

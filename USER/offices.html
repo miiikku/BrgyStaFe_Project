@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barangay Santa Fe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/styles/offices.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://www.dropbox.com/scl/fi/fan2zv4s27rhmpd7gmtex/brgystafe.png?rlkey=exhrm1gcwkaik313g0r9al119&st=2j1m6lkb&dl=1" alt="Barangay Santa Fe Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="home.html">HOME</a></li>
+                <li><a href="offices.html">OFFICES</a></li>
+                <li><a href="request-document.html">REQUEST DOCUMENT</a></li>
+                <li><a href="home.html#about-section">ABOUT</a></li>
+                <li><a href="home.html#about-section">CONTACT</a></li>
+                <li><a href="#" id="user-icon"><img src="https://www.dropbox.com/scl/fi/tnounxbo8vd5763gnoysp/userAccountWhite.png?rlkey=hyos7zrh4ghwr66mjivsqfd5b&st=07eppc1l&dl=1" alt="user-icon" class="user-icon"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="card-container">
+            <div class="card">Health Center</div>
+            <div class="card">Womens</div>
+            <div class="card">Maintenance</div>
+            <div class="card">SK</div>
+        </div>
+    </main>
+
+    <!-- User Profile Popup -->
+    <div id="user-popup" class="user-popup">
+        <div class="user-header">
+            <span>User Options</span>
+            <span class="close-btn" onclick="toggleUserPopup()">&times;</span>
+        </div>
+        <div class="user-content">
+            <a href="user-profile.html">User Profile</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <script src="public/styles/users.js"></script>
+</body>
+</html>

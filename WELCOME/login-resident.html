@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="public/styles/loginpages.css">
+</head>
+<body class="resident-login-page-body">
+    <div class="login-container">
+        <form id="login-form" class="login-form resident-login">
+            <h2>RESIDENT LOGIN</h2>
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="button-group">
+                <button type="submit">Login</button>
+            </div>
+            <div class="link-signup">
+                <a href="signup.html" class="resident-link">Sign Up</a>
+                <a href="forgotpassword.html" class="resident-link">Forgot Password?</a>
+            </div>
+            <div class="link-admin">
+                <a href="login.html" class="admin-link">Barangay Admin</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Notification Popup -->
+    <div id="notification" class="notification">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <span id="notification-message"></span>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            const response = await fetch('/resident-login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.text();
+
+            const notification = document.getElementById('notification');
+            const message = document.getElementById('notification-message');
+
+            if (response.ok) {
+                window.location.href = '/home';
+            } else {
+                message.innerText = result;
+                notification.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
