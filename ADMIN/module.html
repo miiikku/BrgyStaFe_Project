@@ -189,7 +189,28 @@
 
 
     <script src="public/styles/script.js"></script>
+    <script src="/public/js/sessionTimeout.js"></script>
     <script>
+        // SEARCH
+        function searchModules() {
+        // Get the search input value
+        const searchValue = document.querySelector('.search-box input').value.toLowerCase();
+
+        // Search through "Current Elected Officers" table
+        const moduleRows = document.querySelectorAll('#module-table-body tr');
+        moduleRows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            const matches = Array.from(cells).some(cell => 
+                cell.textContent.toLowerCase().includes(searchValue)
+            );
+            if (matches) {
+                row.style.display = ''; // Show the row if there is a match
+            } else {
+                row.style.display = 'none'; // Hide the row if there is no match
+            }
+        });
+    }
+
         // Function to fetch and display modules
         function fetchModules() {
             fetch('/modules')
