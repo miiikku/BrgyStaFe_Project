@@ -361,7 +361,6 @@ textarea {
     left: 10px;
     transform: translateY(-50%);
     padding: 0 5px;
-    background-color: white;
     color: #999;
     transition: 0.2s ease all;
     pointer-events: none;
@@ -528,7 +527,6 @@ th {
     width: 100%;
     box-sizing: border-box;
     font-size: 16px;
-    background-color: #f1f1f1;
     appearance: none; /* Remove default arrow on select */
 }
 
@@ -537,7 +535,6 @@ th {
     top: 50%;
     left: 10px;
     transform: translateY(-50%);
-    background-color: white;
     color: #999;
     padding: 0 5px;
     transition: 0.2s ease all;

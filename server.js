@@ -53,8 +53,6 @@ const createPaymongoPaymentLink = async (amount, description) => {
     }
 };
 
-
-
 // Define allowed origins
 const allowedOrigins = [
   'http://localhost:8080', // Adjust port if different
@@ -77,6 +75,27 @@ const corsOptions = {
   credentials: true // Allow cookies to be sent with requests if needed
 };
 
+
+/************** MIDDLEWARE BAGONG LAGAY *****************/
+// Middleware to ensure user is authenticated and has 'admin' role
+function ensureAdmin(req, res, next) {
+  if (req.session.role === 'admin') {
+    next();
+  } else {
+    res.status(403).send('Forbidden: Admins only');
+  }
+}
+
+// Middleware to ensure user is authenticated and has 'user' role
+function ensureUser(req, res, next) {
+  if (req.session.role === 'user') {
+    next();
+  } else {
+    res.status(403).send('Forbidden: Users only');
+  }
+}
+
+
 // Use CORS middleware with the defined options
 app.use(cors(corsOptions));
 
@@ -86,7 +105,11 @@ app.use(session({
   secret: 'your_secret_key',
   resave: false,
   saveUninitialized: true,
-  cookie: { maxAge: 60000 } // 1 minute for example
+  cookie: {
+    maxAge: 60 * 60 * 1000, // 1 hour
+    secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
+    httpOnly: true, // Prevents JavaScript access to session cookie
+  },
 }));
 
 // Helper function to validate password strength
@@ -155,8 +178,8 @@ app.post('/admin-login', async (req, res) => {
   }
 });
 
-app.get('/admin-details-data', async (req, res) => {
-  if (!req.session.username) {
+app.get('/admin-details-data', ensureAdmin, async (req, res) => {
+  if (!req.session.username || req.session.role !== 'admin') {
     return res.status(401).send('Unauthorized: No user logged in');
   }
 
@@ -399,8 +422,8 @@ app.get('/user-profile.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'USER', 'user-profile.html'));
 });
 
-app.get('/user-profile-data', async (req, res) => {
-  if (!req.session.userId) {
+app.get('/user-profile-data', ensureUser, async (req, res) => {
+  if (!req.session.userId || req.session.role !== 'user') {
     return res.status(401).send('Unauthorized');
   }
 
@@ -2089,11 +2112,24 @@ app.get('/modules', async (req, res) => {
 });
 
 // POST route to add a new elected official (without photo for now)
+// Route to add a new elected officer
 app.post('/modules', async (req, res) => {
   try {
     const { firstName, middleName, lastName, position } = req.body;
-    
+
+    const residentCollection = db.collection('resident');
     const moduleCollection = db.collection('module');
+
+    // Check if the person exists in the resident collection by first, middle, and last name
+    const resident = await residentCollection.findOne({
+      Firstname: { $regex: new RegExp(`^${firstName}$`, 'i') },
+      Middlename: { $regex: new RegExp(`^${middleName}$`, 'i') },
+      Lastname: { $regex: new RegExp(`^${lastName}$`, 'i') }
+    });
+
+    if (!resident) {
+      return res.status(400).json({ success: false, message: 'This person is not in the resident collection.' });
+    }
 
     // Check if this person is already assigned to any position
     const existingOfficial = await moduleCollection.findOne({
@@ -2145,14 +2181,27 @@ app.get('/modules/:id', async (req, res) => {
   }
 });
 
+// Route to edit an existing elected officer
 app.put('/modules/:id', async (req, res) => {
   const id = req.params.id;
   const { firstName, middleName, lastName, position } = req.body;
 
-  try {
-    const moduleCollection = db.collection('module');
+  const residentCollection = db.collection('resident');
+  const moduleCollection = db.collection('module');
 
-    // Check if this person is already assigned to another position
+  try {
+    // Check if the person exists in the resident collection by first, middle, and last name
+    const resident = await residentCollection.findOne({
+      Firstname: { $regex: new RegExp(`^${firstName}$`, 'i') },
+      Middlename: { $regex: new RegExp(`^${middleName}$`, 'i') },
+      Lastname: { $regex: new RegExp(`^${lastName}$`, 'i') }
+    });
+
+    if (!resident) {
+      return res.status(400).json({ success: false, message: 'This person is not in the resident collection.' });
+    }
+
+    // Check if another person with this name is already assigned to a position (excluding the current one being edited)
     const existingOfficial = await moduleCollection.findOne({
       firstName: { $regex: new RegExp(`^${firstName}$`, 'i') },
       middleName: { $regex: new RegExp(`^${middleName}$`, 'i') },
@@ -2164,7 +2213,7 @@ app.put('/modules/:id', async (req, res) => {
       return res.status(400).json({ success: false, message: 'This person is already assigned to a position.' });
     }
 
-    // Check if the position is a key position and already exists for another official
+    // Check if the position is a key position and is already occupied by another person (excluding the current one being edited)
     const keyPositions = ['Punong Barangay', 'Secretary', 'Treasurer', 'SK Chairperson', 'Lupon Chairperson'];
     if (keyPositions.includes(position)) {
       const positionExists = await moduleCollection.findOne({ position, _id: { $ne: new ObjectId(id) } });
@@ -2178,7 +2227,7 @@ app.put('/modules/:id', async (req, res) => {
     const result = await moduleCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedOfficial });
 
     if (result.modifiedCount === 0) {
-      return res.status(404).send('Official not found');
+      return res.status(404).json({ success: false, message: 'Official not found' });
     } else {
       res.status(200).json({ success: true, message: 'Official updated successfully' });
     }

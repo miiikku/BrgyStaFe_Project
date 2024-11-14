@@ -10,7 +10,7 @@
 <body>
     <div class="sidebar">
         <center>
-            <img src="https://www.dropbox.com/scl/fi/hplpyx3p3gjc3ozhxa7w6/Dasmarinas-removebg-preview.png?rlkey=bw11d1gi5odcv59ingug5pjeh&st=tl9dj1dk&dl=1" class="Logo">
+            <img src="https://www.dropbox.com/scl/fi/hplpyx3p3gjc3ozhxa7w6/DasmaLogo.png?rlkey=bw11d1gi5odcv59ingug5pjeh&st=d7rp2eom&dl=1" class="Logo">
             <h1>BARANGAY SANTA FE<br>CITY OF DASMARIÑAS</h1>
         </center>
         <div class="sidenav">
@@ -33,7 +33,7 @@
                     <img src="https://www.dropbox.com/scl/fi/oedqyjb59kspzdylesk6y/user.png?rlkey=1axl685fxswp7olj90dbgu53y&st=7jh50r8n&dl=1" alt="User Avatar" class="dropbtn" onclick="toggleDropdown()">
                     <div id="myDropdown" class="dropdown-content">
                         <a href="admin-details.html" onclick="viewProfile()">User Profile</a>
-                        <a href="module.html">Module</a>
+                        <a href="module.html">Maintenance</a>
                         <a href="#" onclick="logout()">Logout</a>
                     </div>
                 </div>
@@ -65,7 +65,10 @@
         </div>
     </div>
     <script src="public/styles/script.js"></script>
+    <script src="/public/js/sessionTimeout.js"></script>
+
     <script>
+        
         document.addEventListener('DOMContentLoaded', function() {
             if (window.location.pathname.endsWith('dashboard.html')) {
                 fetchDashboardData();

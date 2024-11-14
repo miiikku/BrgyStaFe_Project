@@ -191,6 +191,7 @@
                     <img src="https://www.dropbox.com/scl/fi/oedqyjb59kspzdylesk6y/user.png?rlkey=1axl685fxswp7olj90dbgu53y&st=7jh50r8n&dl=1" alt="User Avatar" class="dropbtn" onclick="toggleDropdown()">
                     <div id="myDropdown" class="dropdown-content">
                         <a href="admin-details.html" onclick="viewProfile()">User Profile</a>
+                        <a href="module.html">Maintenance</a>
                         <a href="#" onclick="logout()">Logout</a>
                     </div>
                 </div>
@@ -243,7 +244,7 @@
             <button class="print-btn" onclick="window.print()">Print</button>
         </div>
     </div>
-
+    <script src="/public/js/sessionTimeout.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const params = new URLSearchParams(window.location.search);
