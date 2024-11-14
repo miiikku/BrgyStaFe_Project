@@ -67,7 +67,6 @@
             </div>
             <div class="account-actions">
                 <!-- Add Modal Triggers -->
-                <button class="add-btn" onclick="openAddLuponModal()">Add Lupon</button>
                 <button class="add-btn" onclick="openAddKasunduanModal()">Add Kasunduan</button>
             </div>
         </div>
@@ -121,90 +120,6 @@
         </table>
     </div>
 </div>
-
-
-        <!-- Add Lupon Modal -->
-        <div id="addModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeAddModal()">&times;</span>
-                <h2>ADD LUPON</h2>
-                <form id="addLuponForm">
-                    <div class="form-row">
-                        <div class="floating-label">
-                            <input type="date" id="date" placeholder=" " required>
-                            <label for="date">Petsa</label>
-                        </div>
-                        <div class="floating-label">
-                            <input type="text" id="text" placeholder=" " readonly>
-                            <label for="text">Usapin Blg.</label>
-                        </div>
-                    </div>
-                       <!-- Nagsumbong Fields -->
-            <div class="form-row">
-                <div class="floating-label">
-                    <input type="text" id="complainantFirstName" placeholder=" " required>
-                    <label for="complainantFirstName">Nagsumbong First Name</label>
-                </div>
-                <div class="floating-label">
-                    <input type="text" id="complainantMiddleName" placeholder=" " required>
-                    <label for="complainantMiddleName">Nagsumbong Middle Name</label>
-                </div>
-                <div class="floating-label">
-                    <input type="text" id="complainantLastName" placeholder=" " required>
-                    <label for="complainantLastName">Nagsumbong Last Name</label>
-                </div>
-            </div>
-
-            <!-- Laban Kay Fields -->
-            <div class="form-row">
-                <div class="floating-label">
-                    <input type="text" id="complaineeFirstName" placeholder=" " required>
-                    <label for="complaineeFirstName">Laban Kay First Name</label>
-                </div>
-                <div class="floating-label">
-                    <input type="text" id="complaineeMiddleName" placeholder=" " required>
-                    <label for="complaineeMiddleName">Laban Kay Middle Name</label>
-                </div>
-                <div class="floating-label">
-                    <input type="text" id="complaineeLastName" placeholder=" " required>
-                    <label for="complaineeLastName">Laban Kay Last Name</label>
-                </div>
-            </div>
-                    <div class="form-row">
-                        <div class="floating-label">
-                            <textarea id="sumbong" placeholder=" " required></textarea>
-                            <label for="sumbong">Sumbong</label>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="floating-label">
-                            <textarea id="lunas" placeholder=" " required></textarea>
-                            <label for="lunas">Lunas</label>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="floating-label">
-                            <input type="number" id="hearingStage" value="1" readonly required>
-                            <label for="hearingStage">Hearing Stage</label>
-                          </div>
-                        <div class="floating-label">
-                            <input type="date" id="hearingDate" placeholder=" " required>
-                            <label for="hearingDate">Hearing Date</label>
-                        </div>
-                        <div class="floating-label">
-                            <select id="status" required>
-                                <option value="Processing">Processing</option>
-                            </select>
-                            <label for="status">Status</label>
-                        </div>
-                    </div>
-                    <div class="button-container">
-                        <button type="submit" class="add-btn">Add Lupon</button>
-                        <button type="button" class="cancel-btn" onclick="closeAddModal()">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
 
         <!-- Add Kasunduan Modal -->
         <div id="addKasunduanModal" class="modal">
@@ -358,6 +273,7 @@
                 <div class="floating-label">
                     <select id="editStatus" required>
                         <option value="Processing">Processing</option>
+                        <option value="Transfer to CFA">Transfer to CFA</option>
                         <option value="Completed">Completed</option>
                     </select>
                     <label for="editStatus">Status</label>
@@ -512,8 +428,9 @@ async function fetchLuponData() {
          <td>
           <a href="#"><img src="https://www.dropbox.com/scl/fi/u6i83geituweeaybi8y9w/pen.png?rlkey=5f7vjmsrn42d1t0iaxdu3jbjy&st=0sk8r60h&dl=1" alt="Edit" class="edit-icon" onclick="openEditModal('${lupon._id}', '${lupon.petsa}', '${lupon.usapinBlg}', '${lupon.complainantFirstName}', '${lupon.complainantMiddleName}', '${lupon.complainantLastName}', '${lupon.complaineeFirstName}', '${lupon.complaineeMiddleName}', '${lupon.complaineeLastName}', '${lupon.sumbong}', '${lupon.lunas}', '${lupon.hearingStage}', '${lupon.hearingDate}', '${lupon.status}')"></a>
           <a href="#"><img src="https://www.dropbox.com/scl/fi/ho6y40rqr930v22ja9219/delete.png?rlkey=b1xjg0s1v3rnrgjx1n5v2usgm&st=xgbxk20f&dl=1" alt="Delete" class="delete-icon" onclick="deleteLupon('${lupon._id}')"></a>
-          <a href="#"><img src="https://www.dropbox.com/scl/fi/v185qat4whwt769dbbbya/blueDocument.png?rlkey=uy1zoguvwgxd55x7sw6ki8c6h&st=4jg7gfil&dl=1" alt="Generate" class="generate-icon" onclick="generateLupon('${lupon._id}')"></a>
+          ${lupon.hearingStage === "3" ? `<a href="#"><img src="https://www.dropbox.com/scl/fi/v185qat4whwt769dbbbya/blueDocument.png?rlkey=uy1zoguvwgxd55x7sw6ki8c6h&st=4jg7gfil&dl=1" alt="Generate" class="generate-icon" onclick="generateLupon('${lupon._id}')"></a>` : ''}
           ${lupon.status === 'Completed' ? `<a href="#"><img src="https://www.dropbox.com/scl/fi/brbnzjxfdeqjerssseaxc/checked.png?rlkey=yinbka4wjvra6n5dxazi4l13a&st=wpwljnp2&dl=1" alt="Transfer" class="transfer-icon" onclick="transferLupon('${lupon._id}')"></a>` : ''}
+          ${lupon.status === 'Transfer to CFA' ? `<a href="#"><img src="https://www.dropbox.com/scl/fi/brbnzjxfdeqjerssseaxc/checked.png?rlkey=yinbka4wjvra6n5dxazi4l13a&st=wpwljnp2&dl=1" alt="Transfer" class="transfer-icon" onclick="transfertoCFA('${lupon._id}')"></a>` : ''}
           </td>
       `;
       luponTableBody.appendChild(row);
@@ -562,87 +479,6 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchLuponData();
   fetchKasunduanData();
 });
-
-
-// ADDING LUPON
-function openAddLuponModal() {
-  document.getElementById('addModal').style.display = 'block'; // Display the modal
-
-  // Fetch the next Usapin Blg. from the server
-  fetch('/next-usapin-blg')
-    .then(response => response.json())
-    .then(data => {
-      console.log("Next Usapin Blg:", data.nextUsapinBlg); // Log to check if the value is fetched correctly
-      document.getElementById('text').value = data.nextUsapinBlg; // Set the input field
-    })
-    .catch(error => {
-      console.error('Error fetching next Usapin Blg:', error);
-    });
-}
-
-
-document.getElementById('addLuponForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-
-    const newLupon = {
-        petsa: document.getElementById('date').value,
-        usapinBlg: document.getElementById('text').value,
-        complainantFirstName: document.getElementById('complainantFirstName').value,
-        complainantMiddleName: document.getElementById('complainantMiddleName').value,
-        complainantLastName: document.getElementById('complainantLastName').value,
-        complaineeFirstName: document.getElementById('complaineeFirstName').value,
-        complaineeMiddleName: document.getElementById('complaineeMiddleName').value,
-        complaineeLastName: document.getElementById('complaineeLastName').value,
-        sumbong: document.getElementById('sumbong').value,
-        lunas: document.getElementById('lunas').value,
-        hearingStage: document.getElementById('hearingStage').value = 1,
-        hearingDate: document.getElementById('hearingDate').value,
-        status: document.getElementById('status').value,
-    };
-
-    try {
-        const response = await fetch('/add-lupon', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newLupon)
-        });
-
-        const result = await response.json();
-        if (result.success) {
-            closeAddModal(); // Close the Add Modal
-            fetchLuponData(); // Refresh the Lupon table to reflect the new entry
-        } else {
-            alert('Failed to add Lupon');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-});
-
-$(document).on('shown.bs.modal', '#addLuponModal', function () {
-    // Fetch the next Usapin Blg. from the server
-    $.ajax({
-        url: '/next-usapin-blg', // Make sure this endpoint is correctly set up in your server
-        method: 'GET',
-        success: function (response) {
-            console.log(response); // Check if the correct response is logged
-            // Assuming the server returns the next Usapin Blg.
-            $('#text').val(response.nextUsapinBlg); // Set the input field
-        },
-        error: function (err) {
-            console.error('Error fetching next Usapin Blg:', err);
-        }
-    });
-});
-
-
-
-function closeAddModal() {
-  const addLuponModal = document.getElementById('addModal');
-  addLuponModal.style.display = 'none'; // Hide the modal
-}
 
 // ADDING KASUNDUAN
 // Function to open Add Kasunduan Modal and populate Lupong Tagapamahala dropdown
@@ -711,6 +547,11 @@ function closeAddKasunduanModal() {
   addKasunduanModal.style.display = 'none'; // Hide the modal
 }
 
+function setMinHearingDate() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('editHearingDate').setAttribute('min', today); // Restrict dates to today onwards
+}
+
 // Open Edit Lupon Modal and Populate Fields
 function openEditModal(id, date, usapinBlg, complainantFirstName, complainantMiddleName, complainantLastName, complaineeFirstName, complaineeMiddleName, complaineeLastName, sumbong, lunas, hearingStage, hearingDate, status) {
     document.getElementById('editId').value = id;
@@ -728,6 +569,7 @@ function openEditModal(id, date, usapinBlg, complainantFirstName, complainantMid
     document.getElementById('editHearingDate').value = hearingDate;
     document.getElementById('editStatus').value = status;
 
+    setMinHearingDate(); // Set minimum date for the hearing date
     // Display the Edit Modal
     document.getElementById('editModal').style.display = 'block';
 }
@@ -774,7 +616,6 @@ document.getElementById('editLuponForm').addEventListener('submit', async functi
         console.error('Error:', error);
     }
 });
-
 
 function closeEditModal() {
     const editModal = document.getElementById('editModal');
@@ -945,6 +786,30 @@ async function transferLupon(id) {
     }
 }
 
+async function transfertoCFA(id) {
+    try {
+        const response = await fetch(`/transfer-to-cfa/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert("Successfully transferred to CFA!");
+            // Optionally, reload or update the table to reflect the new status
+            fetchLuponData(); // Call this function if you have it to refresh the data
+        } else {
+            alert("Transfer failed: " + data.message);
+        }
+    } catch (error) {
+        console.error("Error transferring to CFA:", error);
+    }
+}
+
+
 // TRANSFER KASUNDUAN
 async function transferkasunduan(id) {
     if (confirm('Are you sure you want to transfer this Kasunduan entry?')) {
@@ -1027,12 +892,51 @@ function setMinDate() {
     document.getElementById('editHearingDate').setAttribute('min', today); // For Lupon "Hearing Date" field in Edit form
 }
 
-// Call the setMinDate function when the window loads
+// Call the setMinDate and setMinHearingDate functions when the window loads
 window.onload = function() {
     setMinDate(); // Set minimum date for the date fields in Lupon forms
+    setMinHearingDate(); // Set minimum date for the first hearing date field
     fetchLuponData(); // Fetch Lupon data on page load
     fetchKasunduanData(); // Fetch Kasunduan data on page load (if needed)
 };
+
+// Initialize variables to store the first hearing date
+let firstHearingDate = null;
+
+// Get the hearing date and stage elements
+const hearingDateInput = document.getElementById('editHearingDate');
+const hearingStageSelect = document.getElementById('editHearingStage');
+
+// Event listener for hearing date input (for setting the first hearing date)
+hearingDateInput.addEventListener('change', function () {
+    if (hearingStageSelect.value === '1') {
+        // Set the first hearing date when stage 1 is selected and date is chosen
+        firstHearingDate = new Date(hearingDateInput.value);
+    }
+});
+
+// Event listener for hearing stage changes
+hearingStageSelect.addEventListener('change', function () {
+    const stage = parseInt(hearingStageSelect.value);
+
+    // Ensure the first hearing date is set
+    if (!firstHearingDate && stage === 1) {
+        firstHearingDate = new Date();
+        hearingDateInput.value = firstHearingDate.toISOString().split('T')[0];
+    }
+
+    // Calculate the new hearing date based on the selected stage
+    if (firstHearingDate && stage > 1) {
+        let newHearingDate = new Date(firstHearingDate);
+
+        // Calculate the date offset: 15 days for stage 2, 30 days for stage 3
+        const offsetDays = stage === 2 ? 15 : 30;
+        newHearingDate.setDate(newHearingDate.getDate() + offsetDays);
+
+        // Set the calculated date as the value of the hearing date input
+        hearingDateInput.value = newHearingDate.toISOString().split('T')[0];
+    }
+});
 
     </script>
 </body>

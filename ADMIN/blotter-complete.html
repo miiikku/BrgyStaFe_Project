@@ -61,6 +61,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Time</th>
+                    <th>Blotter No.</th>
                     <th>Complainant's Name</th>
                     <th>Complainee's Name</th>
                     <th>Blotter</th>
@@ -149,6 +150,7 @@
                 row.innerHTML = `
                     <td>${blotter.date || ''}</td>
                     <td>${blotter.time || ''}</td>
+                    <td>${blotter.blotterNo || ''}</td>
                     <td>${complainantFullName.trim()}</td>
                     <td>${complaineeFullName.trim()}</td>
                     <td>${blotter.blotter || ''}</td>

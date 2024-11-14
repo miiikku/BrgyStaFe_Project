@@ -1402,6 +1402,53 @@ app.get('/fetch-blotter', async (req, res) => {
   }
 });
 
+// GET route to fetch the next number considering all complaint collections
+// Endpoint to get the next available Blotter No with the prefix "SF-"
+app.get('/next-blotter-no', async (req, res) => {
+  try {
+    const blotterCollection = db.collection('blotter');
+    const blotterCompleteCollection = db.collection('blotter-complete');
+    const luponCollection = db.collection('lupon');
+    const luponCompleteCollection = db.collection('lupon-complete');
+    const cfaCollection = db.collection('cfa');
+    const cfaCompleteCollection = db.collection('cfa-complete');
+
+    // Get the highest number from all relevant collections
+    const [latestBlotter, latestBlotterComplete, latestLupon, latestLuponComplete, latestCfa, latestCfaComplete] = await Promise.all([
+      blotterCollection.findOne({}, { sort: { blotterNo: -1 } }),
+      blotterCompleteCollection.findOne({}, { sort: { blotterNo: -1 } }),
+      luponCollection.findOne({}, { sort: { usapinBlg: -1 } }),
+      luponCompleteCollection.findOne({}, { sort: { usapinBlg: -1 } }),
+      cfaCollection.findOne({}, { sort: { brgyCaseNo: -1 } }),
+      cfaCompleteCollection.findOne({}, { sort: { brgyCaseNo: -1 } })
+    ]);
+
+    // Extract the numeric parts from the latest numbers
+    const getNumericPart = (str) => {
+      const match = str ? str.match(/\d+/) : null;
+      return match ? parseInt(match[0], 10) : 0;
+    };
+
+    const highestNumbers = [
+      getNumericPart(latestBlotter?.blotterNo),
+      getNumericPart(latestBlotterComplete?.blotterNo),
+      getNumericPart(latestLupon?.usapinBlg),
+      getNumericPart(latestLuponComplete?.usapinBlg),
+      getNumericPart(latestCfa?.brgyCaseNo),
+      getNumericPart(latestCfaComplete?.brgyCaseNo)
+    ];
+
+    // Determine the highest number and increment by 1
+    const nextNumber = Math.max(...highestNumbers) + 1;
+    const nextBlotterNo = `SF-${nextNumber}`;
+
+    // Send the next Blotter No with the prefix
+    res.status(200).json({ nextBlotterNo });
+  } catch (err) {
+    console.error('Error fetching next Blotter No:', err);
+    res.status(500).send({ error: 'Failed to get next Blotter No.' });
+  }
+});
 
 
 // fetch kasunduan data
@@ -1418,15 +1465,26 @@ app.get('/fetch-kasunduan', async (req, res) => {
 
 // Add a new blotter
 app.post('/add-blotter', async (req, res) => {
-  const newBlotter = req.body;
-  
   try {
-      const blotterCollection = db.collection('blotter');
-      const result = await blotterCollection.insertOne(newBlotter);
-      res.status(200).send({ success: true, insertedId: result.insertedId });
+    // Get the next available Blotter No
+    const nextBlotterNoResponse = await axios.get('http://localhost:8080/next-blotter-no');
+    const blotterNo = nextBlotterNoResponse.data.nextBlotterNo;
+
+    // Create the new blotter entry with the unique Blotter No
+    const newBlotter = {
+      ...req.body,
+      blotterNo: blotterNo,  // Assign the generated Blotter No
+      status: 'Processing'   // Set default status to 'Processing'
+    };
+
+    // Insert into the blotter collection
+    const blotterCollection = db.collection('blotter');
+    const result = await blotterCollection.insertOne(newBlotter);
+
+    res.status(200).send({ success: true, insertedId: result.insertedId });
   } catch (err) {
-      console.error('Error adding blotter:', err);
-      res.status(500).send({ success: false });
+    console.error('Error adding blotter:', err);
+    res.status(500).send({ success: false });
   }
 });
 
@@ -1535,7 +1593,7 @@ app.delete('/delete-kasunduan/:id', async (req, res) => {
   }
 });
 
-// transfer blotter
+// transfer blotter to complete
 app.put('/transfer-blotter/:id', async (req, res) => {
   const id = req.params.id;
   try {
@@ -1560,6 +1618,54 @@ app.put('/transfer-blotter/:id', async (req, res) => {
       res.status(500).send({ success: false });
   }
 });
+
+// transfer blotter to lupon
+app.put('/transfer-to-lupon/:id', async (req, res) => {
+  const blotterId = req.params.id;
+  try {
+      const blotterCollection = db.collection('blotter');
+      const luponCollection = db.collection('lupon');
+      const blotterCompleteCollection = db.collection('blotter-complete');
+
+      // Find the blotter entry
+      const blotterData = await blotterCollection.findOne({ _id: new ObjectId(blotterId) });
+      if (!blotterData) {
+          return res.status(404).send('Blotter not found');
+      }
+
+      // Prepare data for the Lupon entry with exact field mappings
+      const luponData = {
+          petsa: new Date().toISOString().split('T')[0], // Today's date in YYYY-MM-DD format
+          usapinBlg: blotterData.blotterNo,
+          complainantFirstName: blotterData.complainantFirstName || "",
+          complainantMiddleName: blotterData.complainantMiddleName || "",
+          complainantLastName: blotterData.complainantLastName || "",
+          complaineeFirstName: blotterData.complaineeFirstName || "",
+          complaineeMiddleName: blotterData.complaineeMiddleName || "",
+          complaineeLastName: blotterData.complaineeLastName || "",
+          sumbong: blotterData.blotter || "",
+          lunas: "",
+          hearingStage: "1",
+          hearingDate: "",
+          status: "Processing"
+      };
+
+      // Insert into the lupon collection
+      await luponCollection.insertOne(luponData);
+
+      // Insert the complete blotter data into blotter-complete
+      await blotterCompleteCollection.insertOne(blotterData);
+
+      // Delete the blotter entry from the blotter collection
+      await blotterCollection.deleteOne({ _id: new ObjectId(blotterId) });
+
+      res.status(200).send({ success: true, message: 'Blotter successfully transferred to Lupon and completed.' });
+  } catch (err) {
+      console.error('Error transferring blotter to Lupon:', err);
+      res.status(500).send({ success: false, message: 'Internal Server Error' });
+  }
+});
+
 
 // transfer kasunduan
 app.put('/transfer-kasunduan/:id', async (req, res) => {
@@ -1639,80 +1745,7 @@ app.get('/fetch-lupon-kasunduan', async (req, res) => {
   }
 });
 
-  // ADDING LUPON AND KASUNDUAN
-// POST route to add new Lupon
-app.post('/add-lupon', async (req, res) => {
-  try {
-    const luponCollection = db.collection('lupon');
-
-    // Fetch the last inserted document sorted by 'usapinBlg' in descending order
-    const latestEntry = await luponCollection.findOne({}, { sort: { usapinBlg: -1 } });
-
-    let newUsapinBlg = 1; // Default Usapin Blg to 1 if there are no previous entries
-
-    if (latestEntry) {
-      newUsapinBlg = parseInt(latestEntry.usapinBlg, 10) + 1; // Increment the last Usapin Blg
-    }
-
-    // Create the new Lupon data with the incremented Usapin Blg
-    const newLupon = {
-      ...req.body,
-      usapinBlg: newUsapinBlg.toString(), // Set the new incremented Usapin Blg
-    };
-
-    // Insert the new Lupon into the collection
-    const result = await luponCollection.insertOne(newLupon);
-
-    // Return success message with inserted document's ID
-    res.status(200).send({ success: true, insertedId: result.insertedId });
-  } catch (err) {
-    console.error('Error adding Lupon:', err);
-    res.status(500).send({ success: false, message: 'Error adding Lupon', error: err.message });
-  }
-});
-
-// GET route to fetch the next Usapin Blg considering both "lupon" and "lupon-complete" collections
-app.get('/next-usapin-blg', async (req, res) => {
-  try {
-    const luponCollection = db.collection('lupon');
-    const luponCompleteCollection = db.collection('lupon-complete');
-
-    // Fetch the highest Usapin Blg from both collections
-    const [latestLupon, latestLuponComplete] = await Promise.all([
-      luponCollection.findOne({}, { sort: { usapinBlg: -1 } }),
-      luponCompleteCollection.findOne({}, { sort: { usapinBlg: -1 } })
-    ]);
-
-    let nextUsapinBlg = 1; // Default to 1 if no data in either collection
-
-    // Determine the highest Usapin Blg
-    if (latestLupon || latestLuponComplete) {
-      const highestLuponBlg = latestLupon ? parseInt(latestLupon.usapinBlg, 10) : 0;
-      const highestLuponCompleteBlg = latestLuponComplete ? parseInt(latestLuponComplete.usapinBlg, 10) : 0;
-      nextUsapinBlg = Math.max(highestLuponBlg, highestLuponCompleteBlg) + 1;
-    }
-
-    // Return the next Usapin Blg as JSON
-    res.status(200).json({ nextUsapinBlg });
-  } catch (err) {
-    console.error('Error fetching next Usapin Blg:', err);
-    res.status(500).send({ error: 'Failed to get next Usapin Blg.' });
-  }
-});
-
-app.get('/sorted-usapin-blg', async (req, res) => {
-  try {
-    const luponCollection = db.collection('lupon');
-    const usapinBlgData = await luponCollection.find({}, { projection: { usapinBlg: 1 } }).sort({ usapinBlg: 1 }).toArray();
-
-    res.json(usapinBlgData);
-  } catch (err) {
-    console.error('Error fetching sorted Usapin Blg:', err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-
+// ADDING LUPON AND KASUNDUAN
 app.post('/add-lupon-kasunduan', async (req, res) => {
   const newKasunduan = req.body;
 
@@ -1814,6 +1847,54 @@ app.put('/transfer-lupon/:id', async (req, res) => {
       res.status(500).send({ success: false });
   }
 });
+
+// Transfer Lupon to CFA and Lupon-Complete
+app.put('/transfer-to-cfa/:id', async (req, res) => {
+  const luponId = req.params.id;
+  try {
+      const luponCollection = db.collection('lupon');
+      const cfaCollection = db.collection('cfa');
+      const luponCompleteCollection = db.collection('lupon-complete');
+
+      // Find the Lupon entry
+      const luponData = await luponCollection.findOne({ _id: new ObjectId(luponId) });
+      if (!luponData) {
+          return res.status(404).send({ success: false, message: 'Lupon entry not found' });
+      }
+
+      // Prepare data for the CFA entry with exact field mappings
+      const cfaData = {
+          brgyCaseNo: luponData.usapinBlg || "", 
+          reason: "",
+          complainantFirstName: luponData.complainantFirstName || "",
+          complainantMiddleName: luponData.complainantMiddleName || "",
+          complainantLastName: luponData.complainantLastName || "",
+          complaineeFirstName: luponData.complaineeFirstName || "",
+          complaineeMiddleName: luponData.complaineeMiddleName || "",
+          complaineeLastName: luponData.complaineeLastName || "",
+          dateIssued: "",
+          pangkatChairperson: "",
+          pangkatMember1: "",
+          pangkatMember2: "",
+          status: "Processing",
+      };
+
+      // Insert into the cfa collection
+      await cfaCollection.insertOne(cfaData);
+
+      // Insert the complete lupon data into lupon-complete
+      await luponCompleteCollection.insertOne(luponData);
+
+      // Delete the lupon entry from the lupon collection
+      await luponCollection.deleteOne({ _id: new ObjectId(luponId) });
+
+      res.status(200).send({ success: true, message: 'Lupon successfully transferred to CFA and completed.' });
+  } catch (err) {
+      console.error('Error transferring Lupon to CFA:', err);
+      res.status(500).send({ success: false, message: 'Internal Server Error' });
+  }
+});
+
 
 // Transfer Kasunduan entry from "lupon-kasunduan" collection to "lupon-kasunduan-complete" collection
 app.put('/transfer-lupon-kasunduan/:id', async (req, res) => {

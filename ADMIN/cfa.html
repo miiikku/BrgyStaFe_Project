@@ -66,9 +66,6 @@
                     <option value="cfa-complete.html">Completed</option>
                 </select>
             </div>
-            <div class="account-actions">
-                <button class="add-btn" onclick="openAddCFA()">Add CFA</button>
-            </div>
         </div>
 
         <!-- Completed CFA Table -->
@@ -96,96 +93,6 @@
                 </table>
             </div>
         </div>
-
-        <!-- Add CFA Modal -->
-<div id="addCFAModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeAddCFAModal()">&times;</span>
-      <h2>Add Certification to File Action (CFA)</h2>
-      <form id="addCFAForm">
-        <div class="form-row">
-          <div class="floating-label">
-            <input type="text" id="brgyCaseNo" name="brgyCaseNo" readonly placeholder="">
-            <label for="brgyCaseNo">Brgy Case No</label>
-          </div>
-          <div class="floating-label">
-            <input type="text" id="reason" name="reason" placeholder=" " required>
-            <label for="reason">For (Reason)</label>
-          </div>
-        </div>
-        <!-- Complainant Fields -->
-        <div class="form-row">
-          <div class="floating-label">
-              <input type="text" id="complainantFirstName" name="complainantFirstName" placeholder=" " required>
-              <label for="complainantFirstName">Complainant First Name</label>
-          </div>
-          <div class="floating-label">
-              <input type="text" id="complainantMiddleName" name="complainantMiddleName" placeholder=" " required>
-              <label for="complainantMiddleName">Complainant Middle Name</label>
-          </div>
-          <div class="floating-label">
-              <input type="text" id="complainantLastName" name="complainantLastName" placeholder=" " required>
-              <label for="complainantLastName">Complainant Last Name</label>
-          </div>
-      </div>
-      
-      <!-- Complainee Fields -->
-      <div class="form-row">
-          <div class="floating-label">
-              <input type="text" id="complaineeFirstName" name="complaineeFirstName" placeholder=" " required>
-              <label for="complaineeFirstName">Complainee First Name</label>
-          </div>
-          <div class="floating-label">
-              <input type="text" id="complaineeMiddleName" name="complaineeMiddleName" placeholder=" " required>
-              <label for="complaineeMiddleName">Complainee Middle Name</label>
-          </div>
-          <div class="floating-label">
-              <input type="text" id="complaineeLastName" name="complaineeLastName" placeholder=" " required>
-              <label for="complaineeLastName">Complainee Last Name</label>
-          </div>
-      </div>
-        <div class="form-row">
-          <div class="floating-label">
-            <input type="date" id="dateIssued" name="dateIssued" placeholder=" " required>
-            <label for="dateIssued">Date Issued</label>
-          </div>
-        </div>
-        <div class="form-row">
-            <div class="floating-label">
-              <select id="pangkatChairperson" name="pangkatChairperson" required>
-                <option value="" disabled selected>Select Pangkat Chairperson</option>
-                <!-- Options will be populated dynamically -->
-            </select>
-            <label for="pangkatChairperson">Pangkat Chairperson</label>
-            </div>
-            <div class="floating-label">
-              <select id="pangkatMember1" name="pangkatMember1" required>
-                <option value="" disabled selected>Select Pangkat Member 1</option>
-                <!-- Options will be populated dynamically -->
-            </select>
-            <label for="pangkatMember1">Pangkat Member 1</label>
-            </div>
-            <div class="floating-label">
-              <select id="pangkatMember2" name="pangkatMember2" required>
-                <option value="" disabled selected>Select Pangkat Member 2</option>
-                <!-- Options will be populated dynamically -->
-              </select>
-            <label for="pangkatMember2">Pangkat Member 2</label>
-            </div>
-        </div>
-        <div class="floating-label">
-          <select id="status" required>
-              <option value="Processing" selected>Processing</option>
-          </select>
-          <label for="status">Status</label>
-      </div>
-        <div class="button-container">
-          <button type="submit" class="add-btn">Add CFA</button>
-          <button type="button" class="cancel-btn" onclick="closeAddCFAModal()">Cancel</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
   <!-- Edit CFA Modal -->
 <div id="editCFAModal" class="modal">
