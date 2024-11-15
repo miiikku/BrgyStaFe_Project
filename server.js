@@ -402,9 +402,23 @@ app.get('/user-details', async (req, res) => {
 
   try {
     const userAccountCollection = db.collection('user-account');
+    const residentCollection = db.collection('resident');
+
+    // Fetch user from the user-account collection
     const user = await userAccountCollection.findOne({ _id: new ObjectId(req.session.userId) });
-    
+
     if (user) {
+      // Use the user's full name to search in the resident collection
+      const resident = await residentCollection.findOne({
+        Firstname: user.firstname,
+        Middlename: user.middlename,
+        Lastname: user.lastname,
+      });
+
+      // Add the age if found in the resident collection
+      user.age = resident ? resident.age : null;
+
+      console.log("Fetched resident from resident collection:", resident);
       res.json(user);
     } else {
       res.status(404).send('User not found');

@@ -206,7 +206,7 @@
             <input type="hidden" id="editId">
             <div class="form-row">
                 <div class="floating-label">
-                    <input type="date" id="editDate" placeholder=" " required>
+                    <input type="date" id="editDate" placeholder=" " readonly>
                     <label for="editDate">Petsa</label>
                 </div>
                 <div class="floating-label">
@@ -879,64 +879,6 @@ function generateLuponKasunduan(id) {
     })
     .catch(error => console.error('Error fetching Kasunduan:', error));
 }
-
-// Bagong Lagay for Dates
-// Function to set today's date as the minimum date for the Date fields
-function setMinDate() {
-    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-    
-    // Apply the minimum date to all Lupon-related date input fields
-    document.getElementById('date').setAttribute('min', today); // For Lupon "Petsa" field in Add form
-    document.getElementById('hearingDate').setAttribute('min', today); // For Lupon "Hearing Date" field in Add form
-    document.getElementById('editDate').setAttribute('min', today); // For Lupon "Petsa" field in Edit form
-    document.getElementById('editHearingDate').setAttribute('min', today); // For Lupon "Hearing Date" field in Edit form
-}
-
-// Call the setMinDate and setMinHearingDate functions when the window loads
-window.onload = function() {
-    setMinDate(); // Set minimum date for the date fields in Lupon forms
-    setMinHearingDate(); // Set minimum date for the first hearing date field
-    fetchLuponData(); // Fetch Lupon data on page load
-    fetchKasunduanData(); // Fetch Kasunduan data on page load (if needed)
-};
-
-// Initialize variables to store the first hearing date
-let firstHearingDate = null;
-
-// Get the hearing date and stage elements
-const hearingDateInput = document.getElementById('editHearingDate');
-const hearingStageSelect = document.getElementById('editHearingStage');
-
-// Event listener for hearing date input (for setting the first hearing date)
-hearingDateInput.addEventListener('change', function () {
-    if (hearingStageSelect.value === '1') {
-        // Set the first hearing date when stage 1 is selected and date is chosen
-        firstHearingDate = new Date(hearingDateInput.value);
-    }
-});
-
-// Event listener for hearing stage changes
-hearingStageSelect.addEventListener('change', function () {
-    const stage = parseInt(hearingStageSelect.value);
-
-    // Ensure the first hearing date is set
-    if (!firstHearingDate && stage === 1) {
-        firstHearingDate = new Date();
-        hearingDateInput.value = firstHearingDate.toISOString().split('T')[0];
-    }
-
-    // Calculate the new hearing date based on the selected stage
-    if (firstHearingDate && stage > 1) {
-        let newHearingDate = new Date(firstHearingDate);
-
-        // Calculate the date offset: 15 days for stage 2, 30 days for stage 3
-        const offsetDays = stage === 2 ? 15 : 30;
-        newHearingDate.setDate(newHearingDate.getDate() + offsetDays);
-
-        // Set the calculated date as the value of the hearing date input
-        hearingDateInput.value = newHearingDate.toISOString().split('T')[0];
-    }
-});
 
     </script>
 </body>
