@@ -250,80 +250,6 @@
   // Call the function when the page loads
   window.onload = fetchCFAData;
 
-  // ADDING CFA
-  function openAddCFA() {
-    document.getElementById("addCFAModal").style.display = "block";
-
-    // Fetch the next Brgy Case No
-    fetch('/next-brgy-case-no-cfa')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('brgyCaseNo').value = data.nextBrgyCaseNo;
-        })
-        .catch(error => console.error('Error fetching next Brgy Case No:', error));
-
-    // Fetch dropdown data for Chairperson and Members
-    fetchPangkatChairperson();
-    fetchPangkatMembers();
-}
-
-document.getElementById("addCFAForm").addEventListener("submit", function(event) {
-  event.preventDefault();
-
-  const complainantFullName = `${document.getElementById('complainantFirstName').value} ${document.getElementById('complainantMiddleName').value} ${document.getElementById('complainantLastName').value}`;
-    const complaineeFullName = `${document.getElementById('complaineeFirstName').value} ${document.getElementById('complaineeMiddleName').value} ${document.getElementById('complaineeLastName').value}`;
-
-    const formData = {
-        brgyCaseNo: document.getElementById('brgyCaseNo').value,
-        reason: document.getElementById('reason').value,
-    complainantFirstName: document.getElementById('complainantFirstName').value,
-    complainantMiddleName: document.getElementById('complainantMiddleName').value,
-    complainantLastName: document.getElementById('complainantLastName').value,
-    complaineeFirstName: document.getElementById('complaineeFirstName').value,
-    complaineeMiddleName: document.getElementById('complaineeMiddleName').value,
-    complaineeLastName: document.getElementById('complaineeLastName').value,
-        dateIssued: document.getElementById('dateIssued').value,
-        pangkatChairperson: document.getElementById('pangkatChairperson').value,
-        pangkatMember1: document.getElementById('pangkatMember1').value,
-        pangkatMember2: document.getElementById('pangkatMember2').value,
-        status: document.getElementById('status').value
-    };
-
-  fetch('/add-cfa', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(formData),
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      alert('CFA added successfully!');
-      closeAddCFAModal();
-      fetchCFAData(); // Refresh the table
-    } else {
-      alert('Error adding CFA');
-    }
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
-});
-
-
-function closeAddCFAModal() {
-  document.getElementById("addCFAModal").style.display = "none";
-}
-
-// Close the modal when the user clicks anywhere outside of it
-window.onclick = function(event) {
-  const modal = document.getElementById("addCFAModal");
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
 // EDITING CFA
 function openEditModal(id, brgyCaseNo, reason, complainantFullName, complaineeFullName, dateIssued, pangkatChairperson, pangkatMember1, pangkatMember2, status) {
     document.getElementById("editCFAId").value = id;
@@ -373,46 +299,55 @@ window.onclick = function(event) {
 }
 
 // Submit the edit form
-document.getElementById("editCFAForm").addEventListener("submit", function(event) {
-  event.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+    const editCFAForm = document.getElementById("editCFAForm");
 
-  const complainantFullName = `${document.getElementById('editComplainantFirstName').value} ${document.getElementById('editComplainantMiddleName').value} ${document.getElementById('editComplainantLastName').value}`;
-    const complaineeFullName = `${document.getElementById('editComplaineeFirstName').value} ${document.getElementById('editComplaineeMiddleName').value} ${document.getElementById('editComplaineeLastName').value}`;
+    if (editCFAForm) {
+        editCFAForm.addEventListener("submit", function(event) {
+            event.preventDefault();
 
-    const formData = {
-        id: document.getElementById("editCFAId").value,
-        brgyCaseNo: document.getElementById("editBrgyCaseNo").value,
-        reason: document.getElementById("editReason").value,
-        complainant: complainantFullName,
-        complainee: complaineeFullName,
-        dateIssued: document.getElementById("editDateIssued").value,
-        pangkatChairperson: document.getElementById("editPangkatChairperson").value,
-        pangkatMember1: document.getElementById("editPangkatMember1").value,
-        pangkatMember2: document.getElementById("editPangkatMember2").value,
-        status: document.getElementById("editStatus").value
-    };
+            const complainantFullName = `${document.getElementById('editComplainantFirstName').value} ${document.getElementById('editComplainantMiddleName').value} ${document.getElementById('editComplainantLastName').value}`;
+            const complaineeFullName = `${document.getElementById('editComplaineeFirstName').value} ${document.getElementById('editComplaineeMiddleName').value} ${document.getElementById('editComplaineeLastName').value}`;
 
-  fetch(`/update-cfa/${formData.id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(formData),
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      alert('CFA updated successfully!');
-      closeEditCFAModal();
-      fetchCFAData(); // Refresh the table
+            const formData = {
+                id: document.getElementById("editCFAId").value,
+                brgyCaseNo: document.getElementById("editBrgyCaseNo").value,
+                reason: document.getElementById("editReason").value,
+                complainant: complainantFullName,
+                complainee: complaineeFullName,
+                dateIssued: document.getElementById("editDateIssued").value,
+                pangkatChairperson: document.getElementById("editPangkatChairperson").value,
+                pangkatMember1: document.getElementById("editPangkatMember1").value,
+                pangkatMember2: document.getElementById("editPangkatMember2").value,
+                status: document.getElementById("editStatus").value,
+            };
+
+            fetch(`/update-cfa/${formData.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        alert("CFA updated successfully!");
+                        closeEditCFAModal();
+                        fetchCFAData(); // Refresh the table
+                    } else {
+                        alert("Error updating CFA");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        });
     } else {
-      alert('Error updating CFA');
+        console.error('Element "editCFAForm" not found.');
     }
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
 });
+
 
 // DELETING CFA
 function deleteCFA(id) {

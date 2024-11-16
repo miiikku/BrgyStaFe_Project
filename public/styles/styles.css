@@ -624,3 +624,25 @@ th {
 .autocomplete-items div:hover {
     background-color: #e9e9e9;
 }
+
+/* Bagong add for additional name */
+.add-btn-name {
+    background-color: transparent; /* Transparent background */
+    color: #005f27;               /* Green "+" symbol */
+    border: 3px solid #005f27;    /* Thick green border */
+    border-radius: 8px;           /* Slightly rounded corners */
+    width: 30px;                  /* Set button width */
+    height: 30px;                 /* Set button height */
+    font-size: 28px;              /* Make "+" symbol large */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-sizing: border-box;       /* Ensure padding doesn't increase size */
+}
+
+.add-btn-name:hover {
+    background-color: #e6f9e6;    /* Light green background on hover */
+    color: #005f27;               /* Keep "+" symbol green */
+    border-color: #005f27;        /* Keep border green */
+}
