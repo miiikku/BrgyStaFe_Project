@@ -232,7 +232,7 @@
                 <li><a href="complaints.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/kbs0xnrc9usw40lv30clw/scales-of-justice.png?rlkey=d36ewu4dge121egpw53qri8mf&st=r04p7f12&dl=1" class="sidebar-icon">Complaints</a></li>
                 <li><a href="barangay-id.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/5bv5aqyto4z9york6lzwq/id-card.png?rlkey=crbfg36zcmb1tq9yfdg0t8zm2&st=ocm8u8fd&dl=1" class="sidebar-icon">Barangay ID</a></li>
                 <li><a href="request.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/idqomcr0ujnsmd54ktpu5/quote-request.png?rlkey=swquji94hs61jlr8y0p992s0n&st=vkr8y4i7&dl=1" class="sidebar-icon">Requests</a></li>
-                <li><a href="module.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/es7o8fr6dw2vkkywjpg66/dashboard.png?rlkey=pp0dy252j9wao81jpz1n50f4p&st=83lbnbnz&dl=1" class="sidebar-icon">Maintenance</a></li>
+                <li><a href="module.html" class="sidebar-link"><img src="https://www.dropbox.com/scl/fi/olqdewf6h2pi148jw0j2p/maintenance.png?rlkey=5rnv8iajpbytp799jgyvs6cqa&st=9qpfgd82&dl=1" class="sidebar-icon">Maintenance</a></li>
             </ul>
         </div>
     </div>
@@ -265,56 +265,45 @@
             <h3>BARANGAY STA. FE</h3>
         </div>
         
-        <div class="kp-date-container">
-            <div class="kp">
-                <p>KP PORMULARYO 7</p>
-            </div>
-            <div class="date-time">
-                <span id="luponDate"></span><br>
-                <b><label>Petsa</label></b>
-            </div>
-        </div> 
         <div class="lupon-container">
             <div class="lupon-header">
-                <h3>PATAWAG LETTER</h3>
+                <h3>TANGGAPAN NG PUNONG BARANGAY</h3>
             </div>
 
             <div class = "usapin">
-                <label>Usapin ng Brgy. Blg. </label>
+                <label>Usaping Barangay Blg. </label>
                 <span id="luponUsapinBlg"></span>
+                <p>Lupon Report</p>
             </div>
 
             <div class="name-block">
                 <p id="luponNagsumbong"></p>
-                <p class="label">(Mga) Nagsumbong</p><br>
+                <p class="label">Complainant's Name</p><br>
 
-                <p class="label">Laban Kay/Kina</p>
                 <p id="luponLabanKay"></p>
+                <p class="label">Complainee's Name</p>
             </div>
-
+            
             <div class="sumbong-text">
-                    <h3>SUMBONG</h3>
-                </div>
-
-            <div class="lupon-body">
-                <p id="sumbong-description">Ako/Kami ay nagrereklamo laban sa mga ipinagsusumbong na pinangalanan sa itaas dahil sa paglabag ng akin/aming mga karapatan at interes sa mga sumusunod:</p>
-                <div class ="lupon-sumbong-text">
-                <p id="luponSumbong"></p>
+                <h3>PATAWAG</h3>
             </div>
 
-            <div class="lupon-body">
-                <p id="lunas-description">DAHIL DITO AKO/KAMI ay nakikiusap na ipinagkaloob sa akin/amin ang mga sumusunod na lunas na naayon sa batas at sa katarunungan.</p>
-                <div class ="lupon-lunas-text">
-                <p id="luponLunas"></p>
-            </div>     
-            </div>
+        <div class="lupon-body">
+            <p>
+                Sa pamamagitan nito, kayo ay ipinatawag upang personal na humarap sa akin kasama ang inyong mga testigo, sa <strong> ika-<span id="appointmentluponDay"></span></strong> araw ng <strong><span id="appointmentluponMonth"></span></strong>, <strong><span id="appointmentluponYear"></span></strong> sa ganap na ika-_________ ng umaga/hapon, upang sagutin ang sumbong na ginawa sa harap ko, na ang sipi ay kalakip nito, para pamagitnan/papagkasunduin ang inyong 
+                    (mga) alitan ng (mga) nagsusumbong.
 
-            <div class="date-issued">
-                <p id="date-issued-text">Ginawa ngayong ika-_____ ng _____, 2024.</p><br>
-                <p id="nagsumbong-text">Nagsumbong</p>
-                <p id="date-received-text">Tinanggap at inihain ngayong _____ ng _____, 2024.</p><br><br>
-            </div>
+                    <br> <br> Sa pamamagitan nito, kayo’y binabalaan na ang inyong pagtanggi o kusang di pagharap bilang pagtalima sa patawag na ito, kayo ay hahadlangan na makapaghain ng ganting-sumbong na magmumula sa nasabing sumbong.
+           
+                    <br><br><strong>TUPARIN ITO</strong>, at kung hindi’y parurusahan kayo sa salang paglapastanganan sa hukuman.
+                
+                    <br><br><p>
+                        Ngayon <strong> ika-<span id="luponDay"></span></strong> araw ng <strong><span id="luponMonth"></span></strong>, <strong><span id="luponYear"></span></strong>.
 
+                </p>
+        </div>
+        
+        <br>
             <div class="chairman-name">
             <b><p id="chairman">HON. EMMANUEL B. NOORA</p></b>
                 <p id="position">Punong Barangay/Pangkat Chairman</p>
@@ -336,13 +325,13 @@
     <script src="/public/js/sessionTimeout.js"></script>
     <script>
 document.addEventListener('DOMContentLoaded', async function () {
+    const params = new URLSearchParams(window.location.search);
     try {
         // Fetch Punong Barangay name from the server
         const response = await fetch('/fetch-punong-barangay');
         const data = await response.json();
-        
+
         if (response.ok) {
-            // Update the chairman's name dynamically and convert it to uppercase
             document.getElementById('chairman').textContent = `HON. ${data.name.toUpperCase()}`;
         } else {
             console.error(data.message);
@@ -352,36 +341,46 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.error("Error fetching Punong Barangay name:", error);
         document.getElementById('chairman').textContent = 'ERROR FETCHING PUNONG BARANGAY';
     }
+    document.getElementById('luponUsapinBlg').textContent = params.get('usapinBlg');
+    document.getElementById('luponNagsumbong').textContent = params.get('nagsumbong');
+    document.getElementById('luponLabanKay').textContent = params.get('labanKay');
 
-    // Process other data from the URL params
-    const params = new URLSearchParams(window.location.search);
+    // Populate appointment details if hearingDate is present
+    const hearingDate = params.get('hearingDate');
+    if (hearingDate) {
+        const [year, month, day] = hearingDate.split('-');
+        const months = ['Enero', 'Pebrero', 'Marso', 'Abril', 'Mayo', 'Hunyo', 'Hulyo', 'Agosto', 'Setyembre', 'Oktubre', 'Nobyembre', 'Disyembre'];
+        const monthName = months[parseInt(month, 10) - 1];
 
-    const luponDate = params.get('date'); // Expecting date in YYYY-MM-DD format
+        document.getElementById('appointmentluponDay').textContent = day || '________';
+        document.getElementById('appointmentluponMonth').textContent = monthName || '________';
+        document.getElementById('appointmentluponYear').textContent = year || '________';
+    } else {
+        document.getElementById('appointmentluponDay').textContent = '________';
+        document.getElementById('appointmentluponMonth').textContent = '________';
+        document.getElementById('appointmentluponYear').textContent = '________';
+    }
 
-    // Create a date object from the luponDate string
-    const dateObj = new Date(luponDate);
+    // Extract the date from the `date` element
+    const blotterDate = params.get('date');
+            if (blotterDate) {
+                const [year, month, day] = blotterDate.split('-'); // Expecting format YYYY-MM-DD
+                const months = ['Enero', 'Pebrero', 'Marso', 'Abril', 'Mayo', 'Hunyo', 'Hulyo', 'Agosto', 'Setyembre', 'Oktubre', 'Nobyembre', 'Disyembre'];
+                const monthName = months[parseInt(month, 10) - 1];
 
-    // Extract the day, month, and year
-    const day = dateObj.getDate();
-    const year = dateObj.getFullYear();
-
-    // Array of month names to use for display
-    const months = [
-        "Enero", "Pebrero", "Marso", "Abril", "Mayo", "Hunyo",
-        "Hulyo", "Agosto", "Setyembre", "Oktubre", "Nobyembre", "Disyembre"
-    ];
-    const month = months[dateObj.getMonth()]; // Get the month name
-
-    // Create formatted text
-    const dateIssuedText = `Ginawa ngayong ika-${day} ng ${month}, ${year}.`;
-    const dateReceivedText = `Tinanggap at inihain ngayong ${day} ng ${month}, ${year}.`;
-
-    // Insert the formatted date into the respective elements
-    document.getElementById('luponDate').textContent = luponDate; // Original location for luponDate
-    document.getElementById('date-issued-text').textContent = dateIssuedText;
-    document.getElementById('date-received-text').textContent = dateReceivedText;
-
+                // Update the dynamic spans with date information
+                document.getElementById('luponDay').textContent = day || '________';
+                document.getElementById('luponMonth').textContent = monthName || '________';
+                document.getElementById('luponYear').textContent = year || '________';
+            } else {
+                // Default placeholders
+                document.getElementById('luponDay').textContent = '________';
+                document.getElementById('luponMonth').textContent = '________';
+                document.getElementById('luponYear').textContent = '________';
+            }
+    
     // Fill the rest of the details from URL params
+    document.getElementById('luponDate').textContent = params.get('date');
     document.getElementById('luponUsapinBlg').textContent = params.get('usapinBlg');
     document.getElementById('luponNagsumbong').textContent = params.get('nagsumbong');
     document.getElementById('luponLabanKay').textContent = params.get('labanKay');
@@ -390,8 +389,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('luponHearingStage').textContent = params.get('hearingStage');
     document.getElementById('luponHearingDate').textContent = params.get('hearingDate');
     document.getElementById('luponStatus').textContent = params.get('status');
-});
 
+});
     </script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
