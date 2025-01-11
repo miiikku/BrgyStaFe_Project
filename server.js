@@ -1530,8 +1530,10 @@ app.put('/update-blotter/:id', async (req, res) => {
     complaineeMiddleName: req.body.complaineeMiddleName,
     complaineeLastName: req.body.complaineeLastName,
     blotter: req.body.blotter,
+    reason: req.body.reason,
     justiceOnDuty: req.body.justiceOnDuty, // This will update the justice on duty
     hearingDate: req.body.hearingDate,
+    hearingTime: req.body.hearingTime,
     status: req.body.status,
   };
 
@@ -1659,8 +1661,10 @@ app.put('/transfer-to-lupon/:id', async (req, res) => {
           complaineeLastName: blotterData.complaineeLastName || "",
           sumbong: blotterData.blotter || "",
           lunas: "",
+          reason: blotterData.reason || "",
           hearingStage: "1",
           hearingDate: "",
+          hearingTime: "",
           status: "Processing"
       };
 

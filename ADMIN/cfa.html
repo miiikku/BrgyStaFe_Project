@@ -398,7 +398,6 @@ function setMinDateForCFA() {
     const today = new Date().toISOString().split('T')[0]; 
 
     // Apply the minimum date to the relevant input fields in the CFA form
-    document.getElementById('dateIssued').min = today;  // For Add CFA form
     document.getElementById('editDateIssued').min = today;  // For Edit CFA form
 }
 

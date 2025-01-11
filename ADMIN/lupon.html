@@ -85,8 +85,10 @@
                     <th>Laban kay</th>
                     <th>Sumbong</th>
                     <th>Lunas</th>
+                    <th>Reason</th>
                     <th>Hearing Stage</th>
                     <th>Hearing Date</th>
+                    <th>Hearing Time</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -266,6 +268,12 @@
             </div>
             <div class="form-row">
                 <div class="floating-label">
+                    <textarea id="editReason" placeholder=" " required></textarea>
+                    <label for="editReason">Reason</label>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="floating-label">
                     <select id="editHearingStage" required>
                       <option value="1" >1</option>
                       <option value="2">2</option>
@@ -276,6 +284,10 @@
                 <div class="floating-label">
                     <input type="date" id="editHearingDate" placeholder=" " >
                     <label for="editHearingDate">Hearing Date</label>
+                </div>
+                <div class="floating-label">
+                    <input type="time" id="editHearingTime" placeholder=" " >
+                    <label for="editHearingTime">Hearing Time</label>
                 </div>
                 <div class="floating-label">
                     <select id="editStatus" required>
@@ -429,11 +441,13 @@ async function fetchLuponData() {
     <td>${lupon.complaineeFirstName} ${lupon.complaineeMiddleName} ${lupon.complaineeLastName}</td>
     <td>${lupon.sumbong}</td>
     <td>${lupon.lunas}</td>
+    <td>${lupon.reason}</td>
     <td>${lupon.hearingStage}</td>
     <td>${lupon.hearingDate}</td>
+    <td>${lupon.hearingTime}</td>
     <td>${lupon.status}</td>
          <td>
-          <a href="#"><img src="https://www.dropbox.com/scl/fi/u6i83geituweeaybi8y9w/pen.png?rlkey=5f7vjmsrn42d1t0iaxdu3jbjy&st=0sk8r60h&dl=1" alt="Edit" class="edit-icon" onclick="openEditModal('${lupon._id}', '${lupon.petsa}', '${lupon.usapinBlg}', '${lupon.complainantFirstName}', '${lupon.complainantMiddleName}', '${lupon.complainantLastName}', '${lupon.complaineeFirstName}', '${lupon.complaineeMiddleName}', '${lupon.complaineeLastName}', '${lupon.sumbong}', '${lupon.lunas}', '${lupon.hearingStage}', '${lupon.hearingDate}', '${lupon.status}')"></a>
+          <a href="#"><img src="https://www.dropbox.com/scl/fi/u6i83geituweeaybi8y9w/pen.png?rlkey=5f7vjmsrn42d1t0iaxdu3jbjy&st=0sk8r60h&dl=1" alt="Edit" class="edit-icon" onclick="openEditModal('${lupon._id}', '${lupon.petsa}', '${lupon.usapinBlg}', '${lupon.complainantFirstName}', '${lupon.complainantMiddleName}', '${lupon.complainantLastName}', '${lupon.complaineeFirstName}', '${lupon.complaineeMiddleName}', '${lupon.complaineeLastName}', '${lupon.sumbong}', '${lupon.lunas}', '${lupon.reason}', '${lupon.hearingStage}', '${lupon.hearingDate}', '${lupon.hearingTime}', '${lupon.status}')"></a>
           <a href="#"><img src="https://www.dropbox.com/scl/fi/ho6y40rqr930v22ja9219/delete.png?rlkey=b1xjg0s1v3rnrgjx1n5v2usgm&st=xgbxk20f&dl=1" alt="Delete" class="delete-icon" onclick="deleteLupon('${lupon._id}')"></a>
           ${lupon.status === 'Processing' ? `<a href="#"><img src="https://www.dropbox.com/scl/fi/2f706u84pw40jwnv3mice/generateJusticeSystem.png?rlkey=xjmdwr9qljhbs4d2p065i8ofe&st=klgizqwg&dl=1" alt="Generate" class="generate-icon" onclick="generatePatawag('${lupon._id}')"></a>` : ''}
           ${lupon.hearingStage === "3" ? `<a href="#"><img src="https://www.dropbox.com/scl/fi/v185qat4whwt769dbbbya/blueDocument.png?rlkey=uy1zoguvwgxd55x7sw6ki8c6h&st=4jg7gfil&dl=1" alt="Generate" class="generate-icon" onclick="generateLupon('${lupon._id}')"></a>` : ''}
@@ -561,7 +575,7 @@ function setMinHearingDate() {
 }
 
 // Open Edit Lupon Modal and Populate Fields
-function openEditModal(id, date, usapinBlg, complainantFirstName, complainantMiddleName, complainantLastName, complaineeFirstName, complaineeMiddleName, complaineeLastName, sumbong, lunas, hearingStage, hearingDate, status) {
+function openEditModal(id, date, usapinBlg, complainantFirstName, complainantMiddleName, complainantLastName, complaineeFirstName, complaineeMiddleName, complaineeLastName, sumbong, lunas, reason, hearingStage, hearingDate, hearingTime, status) {
     document.getElementById('editId').value = id;
     document.getElementById('editDate').value = date;
     document.getElementById('editText').value = usapinBlg;
@@ -573,8 +587,10 @@ function openEditModal(id, date, usapinBlg, complainantFirstName, complainantMid
     document.getElementById('editComplaineeLastName').value = complaineeLastName;
     document.getElementById('editSumbong').value = sumbong;
     document.getElementById('editLunas').value = lunas;
+    document.getElementById('editReason').value = reason;
     document.getElementById('editHearingStage').value = hearingStage;
     document.getElementById('editHearingDate').value = hearingDate;
+    document.getElementById('editHearingTime').value = hearingTime;
     document.getElementById('editStatus').value = status;
 
     setMinHearingDate(); // Set minimum date for the hearing date
@@ -597,8 +613,10 @@ document.getElementById('editLuponForm').addEventListener('submit', async functi
         complaineeLastName: document.getElementById('editComplaineeLastName').value,
         sumbong: document.getElementById('editSumbong').value,
         lunas: document.getElementById('editLunas').value,
+        reason: document.getElementById('editReason').value,
         hearingStage: document.getElementById('editHearingStage').value,
         hearingDate: document.getElementById('editHearingDate').value,
+        hearingTime: document.getElementById('editHearingTime').value,
         status: document.getElementById('editStatus').value,
     };
 
