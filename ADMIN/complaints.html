@@ -28,6 +28,7 @@
             font-size: 18px;
             font-weight: bold;
             color: #2E7D32; /* Dark green color */
+            position: relative;
         }
 
         .card a {
@@ -45,6 +46,49 @@
             background-color: #f0f0f0;
             border-radius: 10px;
         }
+
+        .notif-badge {
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 10px 12px;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px; /* Adjust this to position it inside the card */
+            right: 2px; /* Adjust this to fine-tune placement */
+            transform: translate(50%, -50%); /* Ensures proper centering */
+            display: none; /* Initially hidden */
+        }
+
+        .notif-badge2 {
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 10px 12px;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px; /* Move it higher */
+            right: 2px; /* Move it more to the left */
+            transform: translate(50%, -50%); /* Ensure proper alignment */
+            display: none; /* Initially hidden */
+        }
+
+        .notif-badge3 {
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 10px 12px;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px; /* Move it higher */
+            right: 2px; /* Move it more to the left */
+            transform: translate(50%, -50%); /* Ensure proper alignment */
+            display: none; /* Initially hidden */
+        }
+
     </style>
 </head>
 <body>
@@ -83,9 +127,24 @@
 
         <!-- Cards Section -->
         <div class="card-container">
-            <div class="card"><a href="blotter.html">Blotter</a></div>
-            <div class="card"><a href="lupon.html">Lupon</a></div>
-            <div class="card"><a href="cfa.html">Certification to File Action</a></div>
+            <div class="card">
+                <a href="blotter.html">
+                    Blotter
+                    <span id="notifBadge" class="notif-badge">0</span>
+                </a>
+            </div>
+            <div class="card">
+                <a href="lupon.html">
+                    Lupon
+                    <span id="notifBadgeLupon" class="notif-badge2">0</span>
+                </a>
+            </div>
+            <div class="card">
+                <a href="cfa.html">
+                    Certification to File Action
+                    <span id="notifBadgeCFA" class="notif-badge3">0</span>
+                </a>
+            </div>     
         </div>
     </div>
     <script src="/public/js/sessionTimeout.js"></script>
@@ -111,7 +170,59 @@
                         }
                 }
         }
-    }        
+    }      
+    
+    //For notifications
+    document.addEventListener('DOMContentLoaded', function () {
+        fetchProcessingCountBlotter();
+        fetchProcessingCountLupon();
+        fetchProcessingCountCFA();
+    });
+
+function fetchProcessingCountBlotter() {
+    fetch('/count-processing-blotter')
+        .then(response => response.json())
+        .then(data => {
+            const notifBadge = document.getElementById('notifBadge');
+            if (data.count > 0) {
+                notifBadge.textContent = data.count; // Show number of pending requests
+                notifBadge.style.display = 'inline-block'; // Make it visible
+            } else {
+                notifBadge.style.display = 'none'; // Hide if no processing requests
+            }
+        })
+        .catch(error => console.error('Error fetching processing count:', error));
+}
+
+function fetchProcessingCountLupon() {
+    fetch('/count-processing-lupon') // Endpoint for Barangay Clearance
+        .then(response => response.json())
+        .then(data => {
+            const notifBadgeLupon = document.getElementById('notifBadgeLupon');
+            if (data.count > 0) {
+                notifBadgeLupon.textContent = data.count;
+                notifBadgeLupon.style.display = 'inline-block';
+            } else {
+                notifBadgeLupon.style.display = 'none';
+            }
+        })
+        .catch(error => console.error('Error fetching processing count for lupon:', error));
+}
+
+function fetchProcessingCountCFA() {
+    fetch('/count-processing-cfa') // Endpoint for Barangay Clearance
+        .then(response => response.json())
+        .then(data => {
+            const notifBadgeCFA = document.getElementById('notifBadgeCFA');
+            if (data.count > 0) {
+                notifBadgeCFA.textContent = data.count;
+                notifBadgeCFA.style.display = 'inline-block';
+            } else {
+                notifBadgeCFA.style.display = 'none';
+            }
+        })
+        .catch(error => console.error('Error fetching processing count for cfa:', error));
+}
     </script>
 </body>
 </html>

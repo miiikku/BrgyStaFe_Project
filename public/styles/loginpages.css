@@ -32,6 +32,10 @@ body.resident-login-page-body {
     width: 100%;
 }
 
+.enterotp, .resetp {
+    text-align: center;  
+}
+
 .login-form h2 {
     margin-bottom: 20px;
     color: #1e3a8a;

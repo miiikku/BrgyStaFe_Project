@@ -28,6 +28,7 @@
             font-size: 18px;
             font-weight: bold;
             color: #2E7D32; /* Dark green color */
+            position: relative;
         }
 
         .card a {
@@ -45,6 +46,49 @@
             background-color: #f0f0f0;
             border-radius: 10px;
         }
+        
+        .notif-badge {
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 10px 12px;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px; /* Adjust this to position it inside the card */
+            right: 2px; /* Adjust this to fine-tune placement */
+            transform: translate(50%, -50%); /* Ensures proper centering */
+            display: none; /* Initially hidden */
+        }
+
+        .notif-badge2 {
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 10px 12px;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px; /* Move it higher */
+            right: 2px; /* Move it more to the left */
+            transform: translate(50%, -50%); /* Ensure proper alignment */
+            display: none; /* Initially hidden */
+        }
+
+        .notif-badge3 {
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 10px 12px;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px; /* Move it higher */
+            right: 2px; /* Move it more to the left */
+            transform: translate(50%, -50%); /* Ensure proper alignment */
+            display: none; /* Initially hidden */
+        }
+
     </style>
 </head>
 <body>
@@ -83,12 +127,84 @@
 
         <!-- Cards Section -->
         <div class="card-container">
-            <div class="card"><a href="request-certification.html">Barangay Certification</a></div>
-            <div class="card"><a href="request-clearance.html">Barangay Clearance</a></div>
-            <div class="card"><a href="request-indigency.html">Barangay Indigency</a></div>
+            <div class="card">
+                <a href="request-certification.html">
+                    Barangay Certification
+                    <span id="notifBadge" class="notif-badge">0</span>
+                </a>
+            </div>            
+            <div class="card">
+                <a href="request-clearance.html">
+                    Barangay Clearance
+                    <span id="notifBadgeClearance" class="notif-badge2" style="display: none;">0</span>
+                </a>
+            </div>
+            
+            <div class="card">
+                <a href="request-indigency.html">
+                    Barangay Indigency
+                    <span id="notifBadgeIndigency" class="notif-badge3" style="display: none;">0</span>
+                </a>
+            </div>
         </div>
     </div>
     <script src="public/styles/script.js"></script>
     <script src="/public/js/sessionTimeout.js"></script>
+    <script>
+        // Notification for Request Certification
+document.addEventListener('DOMContentLoaded', function () {
+    fetchProcessingCount();
+    fetchProcessingCountClearance();
+    fetchProcessingCountIndigency();
+});
+
+// Function to fetch count of "Processing" requests
+function fetchProcessingCount() {
+    fetch('/count-processing-certifications')
+        .then(response => response.json())
+        .then(data => {
+            const notifBadge = document.getElementById('notifBadge');
+            if (data.count > 0) {
+                notifBadge.textContent = data.count; // Show number of pending requests
+                notifBadge.style.display = 'inline-block'; // Make it visible
+            } else {
+                notifBadge.style.display = 'none'; // Hide if no processing requests
+            }
+        })
+        .catch(error => console.error('Error fetching processing count:', error));
+}
+
+// Function to fetch count of "Processing" requests for Barangay Clearance
+function fetchProcessingCountClearance() {
+    fetch('/count-processing-clearance') // Endpoint for Barangay Clearance
+        .then(response => response.json())
+        .then(data => {
+            const notifBadgeClearance = document.getElementById('notifBadgeClearance');
+            if (data.count > 0) {
+                notifBadgeClearance.textContent = data.count;
+                notifBadgeClearance.style.display = 'inline-block';
+            } else {
+                notifBadgeClearance.style.display = 'none';
+            }
+        })
+        .catch(error => console.error('Error fetching processing count for clearance:', error));
+}
+
+// Function to fetch count of "Processing" requests for Barangay Indigency
+function fetchProcessingCountIndigency() {
+    fetch('/count-processing-indigency') // Endpoint for Barangay Clearance
+        .then(response => response.json())
+        .then(data => {
+            const notifBadgeIndigency = document.getElementById('notifBadgeIndigency');
+            if (data.count > 0) {
+                notifBadgeIndigency.textContent = data.count;
+                notifBadgeIndigency.style.display = 'inline-block';
+            } else {
+                notifBadgeIndigency.style.display = 'none';
+            }
+        })
+        .catch(error => console.error('Error fetching processing count for indigency:', error));
+}
+    </script>
 </body>
 </html>

@@ -145,42 +145,47 @@
                             <label for="blotterNo">Blotter No.</label>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <!-- Complainant's Name (First Name, Middle Name, Last Name) -->
-                        <div>
+                    <!-- BLOTTER COMPLAINANTS -->
+                    <div id="complainant-container">
+                        <div class="form-row complainant-row">
+                          <div>
                             <button type="button" class="add-btn-name" onclick="addBlotterComplainant()">+</button>
+                          </div>
+                          <div class="floating-label">
+                            <input type="text" name="complainantFirstName[]" placeholder=" " required>
+                            <label>Complainant's First Name</label>
+                          </div>
+                          <div class="floating-label">
+                            <input type="text" name="complainantMiddleName[]" placeholder=" " required>
+                            <label>Complainant's Middle Name</label>
+                          </div>
+                          <div class="floating-label">
+                            <input type="text" name="complainantLastName[]" placeholder=" " required>
+                            <label>Complainant's Last Name</label>
+                          </div>
                         </div>
-                        <div class="floating-label">
-                            <input type="text" id="complainantFirstName" placeholder=" " required>
-                            <label for="complainantFirstName">Complainant's First Name</label>
-                        </div>
-                        <div class="floating-label">
-                            <input type="text" id="complainantMiddleName" placeholder=" " required>
-                            <label for="complainantMiddleName">Complainant's Middle Name</label>
-                        </div>
-                        <div class="floating-label">
-                            <input type="text" id="complainantLastName" placeholder=" " required>
-                            <label for="complainantLastName">Complainant's Last Name</label>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                    <!-- Complainee's Name (First Name, Middle Name, Last Name) -->
-                    <div>
-                        <button type="button" class="add-btn-name" onclick="addBlotterComplainee()">+</button>
-                    </div>
-                    <div class="floating-label">
-                            <input type="text" id="complaineeFirstName" placeholder=" " required>
-                            <label for="complaineeFirstName">Complainee's First Name</label>
-                        </div>
-                        <div class="floating-label">
-                            <input type="text" id="complaineeMiddleName" placeholder=" " required>
-                            <label for="complaineeMiddleName">Complainee's Middle Name</label>
-                        </div>
-                        <div class="floating-label">
-                            <input type="text" id="complaineeLastName" placeholder=" " required>
-                            <label for="complaineeLastName">Complainee's Last Name</label>
-                        </div>
-                    </div>
+                      </div>
+
+                    <!-- BLOTTER COMPLAINEES -->
+<div id="complainee-container">
+  <div class="form-row complainee-row">
+    <div>
+      <button type="button" class="add-btn-name" onclick="addBlotterComplainee()">+</button>
+    </div>
+    <div class="floating-label">
+      <input type="text" name="complaineeFirstName[]" placeholder=" " required>
+      <label>Complainee's First Name</label>
+    </div>
+    <div class="floating-label">
+      <input type="text" name="complaineeMiddleName[]" placeholder=" " required>
+      <label>Complainee's Middle Name</label>
+    </div>
+    <div class="floating-label">
+      <input type="text" name="complaineeLastName[]" placeholder=" " required>
+      <label>Complainee's Last Name</label>
+    </div>
+  </div>
+</div>
                     <div class="form-row">
                         <div class="floating-label">
                             <textarea id="blotter" placeholder=" " required></textarea>
@@ -520,21 +525,24 @@ function searchBlotterAndKasunduan() {
 
         // Function to fetch and display Blotter data
         function fetchBlotterData() {
+        fetch('/fetch-blotter')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('complaint-table-body');
+                tableBody.innerHTML = ''; // Clear the table
 
-    fetch('/fetch-blotter')
-        .then(response => response.json())
-        .then(data => {
-            const tableBody = document.getElementById('complaint-table-body');
-            tableBody.innerHTML = ''; // Clear the table
-
-            data.forEach(item => {
-                const row = `
+                data.forEach(item => {
+                    // for arrays
+                    const complainantsText = item.complainants?.map(c => `${c.firstName} ${c.middleName} ${c.lastName}`).join(', ') || '';
+                    const complaineesText = item.complainees?.map(c => `${c.firstName} ${c.middleName} ${c.lastName}`).join(', ') || '';
+                   
+                    const row = `
                     <tr>
                         <td>${item.date}</td>
                         <td>${item.time}</td>
                         <td>${item.blotterNo}</td>
-                        <td>${item.complainantFirstName} ${item.complainantMiddleName} ${item.complainantLastName}</td>
-                        <td>${item.complaineeFirstName} ${item.complaineeMiddleName} ${item.complaineeLastName}</td>
+                        <td>${complainantsText}</td>
+                        <td>${complaineesText}</td>
                         <td>${item.blotter}</td>
                         <td>${item.reason}</td>
                         <td>${item.justiceOnDuty || ''}</td>
@@ -577,29 +585,43 @@ function searchBlotterAndKasunduan() {
         }
 
 
-document.getElementById('addComplaintForm').addEventListener('submit', function(e) {
+        document.getElementById('addComplaintForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    // Get the selected text (name) from the Justice on Duty dropdown
+    const getValues = (name) => [...document.querySelectorAll(`[name="${name}"]`)].map(input => input.value);
+
+    const complainantFirstNames = getValues("complainantFirstName[]");
+    const complainantMiddleNames = getValues("complainantMiddleName[]");
+    const complainantLastNames = getValues("complainantLastName[]");
+    const complaineeFirstNames = getValues("complaineeFirstName[]");
+    const complaineeMiddleNames = getValues("complaineeMiddleName[]");
+    const complaineeLastNames = getValues("complaineeLastName[]");
+
     const justiceOnDutyDropdown = document.getElementById('justiceOnDuty');
     const selectedJusticeText = justiceOnDutyDropdown.options[justiceOnDutyDropdown.selectedIndex].text;
-    
+
     const newComplaint = {
         date: document.getElementById('date').value,
         time: document.getElementById('time').value,
-        complainantFirstName: document.getElementById('complainantFirstName').value,
-        complainantMiddleName: document.getElementById('complainantMiddleName').value,
-        complainantLastName: document.getElementById('complainantLastName').value,
-        complaineeFirstName: document.getElementById('complaineeFirstName').value,
-        complaineeMiddleName: document.getElementById('complaineeMiddleName').value,
-        complaineeLastName: document.getElementById('complaineeLastName').value,
+        blotterNo: document.getElementById('blotterNo').value,
+        complainants: complainantFirstNames.map((_, i) => ({
+            firstName: complainantFirstNames[i],
+            middleName: complainantMiddleNames[i],
+            lastName: complainantLastNames[i]
+        })),
+        complainees: complaineeFirstNames.map((_, i) => ({
+            firstName: complaineeFirstNames[i],
+            middleName: complaineeMiddleNames[i],
+            lastName: complaineeLastNames[i]
+        })),
         blotter: document.getElementById('blotter').value,
         reason: document.getElementById('reason').value,
-        justiceOnDuty: selectedJusticeText, // Save the name, not the ID
+        justiceOnDuty: selectedJusticeText,
         hearingDate: document.getElementById('hearingDate').value,
         hearingTime: document.getElementById('hearingTime').value,
         status: document.getElementById('status').value
     };
+
 
     fetch('/add-blotter', {
         method: 'POST',
@@ -612,7 +634,9 @@ document.getElementById('addComplaintForm').addEventListener('submit', function(
             if (data.success) {
                 fetchBlotterData(); // Refresh the table
                 closeAddModal(); // Close the modal
-            }
+            } else {
+            alert("Failed to save complaint.");
+        }
         }).catch(error => console.error('Error adding complaint:', error));
 });
 
@@ -624,7 +648,6 @@ document.getElementById('addComplaintForm').addEventListener('submit', function(
             addModal.style.display = 'none';
         }
 
-// Function to open Edit Modal with pre-filled values
 // Function to open Edit Modal with pre-filled values
 function openEditModal(id, date, time, blotterNo, complainantFirstName, complainantMiddleName, complainantLastName, complaineeFirstName, complaineeMiddleName, complaineeLastName, blotter, reason, justiceOnDuty, hearingDate, hearingTime, status) {
     console.log({ id, date, time, blotterNo, complainantFirstName, complainantMiddleName, complainantLastName, complaineeFirstName, complaineeMiddleName, complaineeLastName, blotter, reason, justiceOnDuty, hearingDate, hearingTime, status });
@@ -1144,6 +1167,50 @@ function populateEditKasunduanJusticeOnDutyDropdown(selectedJusticeOnDuty) {
             });
         })
         .catch(error => console.error('Error fetching Justice on Duty:', error));
+}
+
+// for adding multiple names
+let complainantCount = 1;
+let complaineeCount = 1;
+
+function addBlotterComplainant() {
+  if (complainantCount >= 5) return alert("Maximum of 5 complainants only.");
+  
+  const container = document.getElementById('complainant-container');
+  const original = container.querySelector('.complainant-row');
+  const clone = original.cloneNode(true);
+
+  clone.querySelectorAll('input').forEach(input => input.value = '');
+
+  const btn = clone.querySelector('button');
+  btn.textContent = '-';
+  btn.onclick = function () {
+    clone.remove();
+    complainantCount--;
+  };
+
+  container.appendChild(clone);
+  complainantCount++;
+}
+
+function addBlotterComplainee() {
+  if (complaineeCount >= 5) return alert("Maximum of 5 complainees only.");
+
+  const container = document.getElementById('complainee-container');
+  const original = container.querySelector('.complainee-row');
+  const clone = original.cloneNode(true);
+
+  clone.querySelectorAll('input').forEach(input => input.value = '');
+
+  const btn = clone.querySelector('button');
+  btn.textContent = '-';
+  btn.onclick = function () {
+    clone.remove();
+    complaineeCount--;
+  };
+
+  container.appendChild(clone);
+  complaineeCount++;
 }
 
 

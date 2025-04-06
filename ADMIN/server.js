@@ -1610,18 +1610,17 @@ app.post('/add-kasunduan', async (req, res) => {
 });
 
 //edit blotter table
-// Update a specific blotter by ID (add this to server.js)
+// Update a specific blotter by ID
 app.put('/update-blotter/:id', async (req, res) => {
   const id = req.params.id;
+
+  // Extract the updated blotter data from the request body
   const updatedBlotter = {
     date: req.body.date,
     time: req.body.time,
-    complainantFirstName: req.body.complainantFirstName,
-    complainantMiddleName: req.body.complainantMiddleName,
-    complainantLastName: req.body.complainantLastName,
-    complaineeFirstName: req.body.complaineeFirstName,
-    complaineeMiddleName: req.body.complaineeMiddleName,
-    complaineeLastName: req.body.complaineeLastName,
+    blotterNo: req.body.blotterNo,
+    complainants: req.body.complainants, // Handle as an array of objects
+    complainees: req.body.complainees, // Handle as an array of objects
     blotter: req.body.blotter,
     reason: req.body.reason,
     justiceOnDuty: req.body.justiceOnDuty, // This will update the justice on duty
@@ -1632,7 +1631,11 @@ app.put('/update-blotter/:id', async (req, res) => {
 
   try {
     const blotterCollection = db.collection('blotter');
+
+    // Update the specific blotter in MongoDB
     await blotterCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedBlotter });
+
+    // Send a success response
     res.status(200).send({ success: true });
   } catch (err) {
     console.error('Error updating blotter:', err);

@@ -250,7 +250,7 @@
 
             <div class="blotter-body">
                 <p>
-                    Sa pamamagitan nito, kayo ay ipinatawag upang personal na humarap sa akin kasama ang inyong mga testigo, sa <strong> ika-<span id="appointmentDay"></span></strong> araw ng <strong><span id="appointmentMonth"></span></strong>, <strong><span id="appointmentYear"></span></strong> sa ganap na ika-_________ ng umaga/hapon, upang sagutin ang sumbong na ginawa sa harap ko, na ang sipi ay kalakip nito, para pamagitnan/papagkasunduin ang inyong 
+                    Sa pamamagitan nito, kayo ay ipinatawag upang personal na humarap sa akin kasama ang inyong mga testigo, sa <strong> ika-<span id="appointmentDay"></span></strong> araw ng <strong><span id="appointmentMonth"></span></strong>, <strong><span id="appointmentYear"></span></strong> sa ganap na ika-<strong><span id="hearingTime"></span></span></strong> ng umaga/hapon, upang sagutin ang sumbong na ginawa sa harap ko, na ang sipi ay kalakip nito, para pamagitnan/papagkasunduin ang inyong 
                     (mga) alitan ng (mga) nagsusumbong.
 
                     <br> <br> Sa pamamagitan nito, kayo’y binabalaan na ang inyong pagtanggi o kusang di pagharap bilang pagtalima sa patawag na ito, kayo ay hahadlangan na makapaghain ng ganting-sumbong na magmumula sa nasabing sumbong.
@@ -325,6 +325,14 @@
         document.getElementById('appointmentDay').textContent = '________';
         document.getElementById('appointmentMonth').textContent = '________';
         document.getElementById('blotterYear').textContent = '________';
+    }
+
+    // Fetch Hearing Time from URL
+    const hearingTime = params.get('hearingTime');
+    if (hearingTime) {
+        document.getElementById('hearingTime').textContent = hearingTime;
+    } else {
+        document.getElementById('hearingTime').textContent = '________'; // Default placeholder if missing
     }
 
     
